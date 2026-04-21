@@ -1,7 +1,7 @@
 import { ScrapedHtml } from "@/components/ScrapedHtml";
 import { loadScrapedBody } from "@/lib/loadScrapedBody";
 
-export default function Home() {
-  const html = loadScrapedBody("home-body-inner.html");
+export default function PrivacyPolicyPage() {
+  const html = loadScrapedBody("privacy-body-inner.html");
   return <ScrapedHtml html={html} />;
 }

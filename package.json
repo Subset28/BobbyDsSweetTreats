@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "rebuild:godaddy-css": "node scripts/rebuild-godaddy-css.mjs",
+    "download:site-media": "node scripts/download-site-media.mjs"
   },
   "dependencies": {
     "next": "16.2.4",

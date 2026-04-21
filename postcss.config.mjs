@@ -1,7 +1,6 @@
+/** GoDaddy export CSS is not compatible with Tailwind's parser; use plain CSS. */
 const config = {
-  plugins: {
-    "@tailwindcss/postcss": {},
-  },
+  plugins: {},
 };
 
 export default config;

@@ -1,26 +1,32 @@
-@import "tailwindcss";
+@import "./godaddy-all.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+.scraped-root {
+  width: 100%;
+  min-width: 0;
+}
+
+/*
+ * Primary nav <li> items use .c1-2t { visibility: hidden } until GoDaddy’s JS runs.
+ */
+.scraped-root nav[data-aid="HEADER_NAV_RENDERED"] > ul > li.nav-item {
+  visibility: visible !important;
+}
+
+/* Filled “Our Story” gallery: allow horizontal swipe (GoDaddy CSS used pan-y only). */
+.scraped-root .bst-gallery-static .carousel .carousel-track {
+  touch-action: pan-x pinch-zoom;
+}
+
+/* Footer “Powered by” + logo row */
+.scraped-root p[data-aid="FOOTER_POWERED_BY_AIRO_RENDERED"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
 }
