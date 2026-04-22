@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+/* Order matters: site overrides in globals must win over GoDaddy export tokens. */
+import "./godaddy-all.css";
 import "./globals.css";
 
 export const metadata: Metadata = {

@@ -1,32 +1,133 @@
-@import "./godaddy-all.css";
+/* Site overrides — loaded after godaddy-all.css in app/layout.tsx */
 
-html,
-body {
-  margin: 0;
-}
+html{scrollbar-gutter:stable}html,body{margin:0}
 
-.scraped-root {
-  width: 100%;
-  min-width: 0;
-}
+.scraped-root:not(.scraped-shop-page) .page-inner{min-height:100vh}
 
-/*
- * Primary nav <li> items use .c1-2t { visibility: hidden } until GoDaddy’s JS runs.
- */
-.scraped-root nav[data-aid="HEADER_NAV_RENDERED"] > ul > li.nav-item {
-  visibility: visible !important;
-}
+.scraped-root{width:100%;min-width:0}
 
-/* Filled “Our Story” gallery: allow horizontal swipe (GoDaddy CSS used pan-y only). */
-.scraped-root .bst-gallery-static .carousel .carousel-track {
-  touch-action: pan-x pinch-zoom;
-}
+.scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul>li.nav-item{visibility:visible!important}
 
-/* Footer “Powered by” + logo row */
-.scraped-root p[data-aid="FOOTER_POWERED_BY_AIRO_RENDERED"] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+.scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul>li.nav-item:has([data-aid=NAV_MORE]){display:none!important}
+
+.scraped-root .widget-header [data-aid=SEARCH_FORM_RENDERED],.scraped-root .widget-header [data-aid=SEARCH_FORM_RENDERED] *{visibility:visible!important}
+
+.scraped-root .widget-header [data-aid=SEARCH_FORM_RENDERED]{flex-shrink:0!important;min-width:40px!important}
+
+@media (min-width:1024px){.scraped-root nav:has([data-aid=HAMBURGER_MENU_LINK]){display:none!important}}
+
+.scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul>li.nav-item>a{white-space:nowrap;text-transform:none!important;letter-spacing:normal!important;font-size:16px!important;font-weight:400!important}
+
+.scraped-root .widget-header div[data-ux=Block]:has([id^=navBar-]){box-sizing:border-box!important;padding-bottom:24px!important;font-weight:400!important}
+
+.scraped-root nav[data-aid=HEADER_NAV_RENDERED]{padding-bottom:0!important;font-weight:400!important;line-height:24px!important}
+
+.scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul{margin-bottom:0!important;top:auto!important}
+
+.scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul>li.nav-item>a[data-ux=NavLink],.scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul>li.nav-item>a[data-ux=NavLinkActive]{margin:0!important}
+
+.scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul>li.nav-item>a[data-ux=NavLink]{padding-bottom:4px;border-bottom:none!important}
+
+.scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul>li.nav-item>a[data-ux=NavLinkActive]{padding-bottom:4px;border-bottom:1px solid #da6900!important}
+
+.scraped-root .bst-gallery-static .carousel .carousel-track{touch-action:pan-x pinch-zoom}
+
+.scraped-root .bst-featured-grid{flex-wrap:wrap;justify-content:center;align-items:stretch;gap:24px;display:flex}
+
+.scraped-root .bst-featured-card{text-align:center;flex:1 1 220px;min-width:180px;max-width:280px}
+
+.scraped-shop-page #ols-shop-container{background:#fff}
+
+.scraped-root.scraped-shop-page .layout,.scraped-root.scraped-shop-page [data-ux=Page],.scraped-root.scraped-shop-page .page-inner{box-sizing:border-box;width:100%;max-width:none;min-height:0!important}
+
+.scraped-shop-page .widget-shop,.scraped-shop-page .widget-shop>[data-ux=Widget],.scraped-shop-page #bs-9,.scraped-shop-page #ols-shop-container,.scraped-shop-page #ols-shop-container>section[data-ux=Section],.scraped-shop-page #ols-shop-container [data-container-id=ols-shop]{box-sizing:border-box;width:100%;max-width:100%;min-height:0!important}
+
+.scraped-shop-page #ols-shop-container>section[data-ux=Section]{padding-top:24px!important;padding-bottom:12px!important}
+
+@media (max-width:767px){.scraped-shop-page #ols-shop-container>section[data-ux=Section]{padding-bottom:10px!important}}
+
+.scraped-shop-page .widget-shop{margin-block-end:0!important;padding-block-end:0!important}
+
+.scraped-shop-page .widget-footer{margin-block-start:0!important}
+
+.scraped-root .widget-footer,.scraped-root .widget-footer>[data-ux=Widget]{min-height:0!important}
+
+.scraped-root .widget-footer section[data-ux=Section]{padding-top:56px!important;padding-bottom:56px!important}
+
+@media (max-width:767px){.scraped-root .widget-footer section[data-ux=Section]{padding-top:40px!important;padding-bottom:40px!important}}
+
+.scraped-root.scraped-shop-page .widget-footer [data-ux=Layout]{max-width:1280px!important;margin-left:auto!important;margin-right:auto!important;padding-left:24px!important;padding-right:24px!important}
+
+.scraped-root .widget-footer [data-ux=FooterDetails][data-aid=FOOTER_COPYRIGHT_RENDERED]{aspect-ratio:unset!important;text-align:center!important;box-sizing:border-box!important;width:100%!important;max-width:100%!important}
+
+.scraped-root .widget-footer [data-ux=FooterDetails][data-aid=FOOTER_COPYRIGHT_RENDERED] :is(p,span){letter-spacing:.14em!important;text-transform:uppercase!important;color:#575757!important;font-family:Poppins,arial,sans-serif!important;font-size:.9375rem!important;font-weight:400!important;line-height:1.5!important}
+
+.scraped-root .widget-footer [data-ux=Layout]{text-align:center!important;box-sizing:border-box!important;flex-direction:column!important;align-items:center!important;width:100%!important;max-width:100%!important;display:flex!important}
+
+.scraped-root .widget-footer [data-ux=Layout]>*{box-sizing:border-box!important;width:100%!important;max-width:100%!important}
+
+.scraped-root .widget-footer [data-ux=Layout]>div[data-ux=Container]:has(ul[data-ux=NavFooter]){justify-content:center!important;width:100%!important;min-width:0!important;display:flex!important}
+
+.scraped-root .widget-footer ul[data-ux=NavFooter]{flex-flow:wrap!important;flex-grow:0!important;flex-basis:auto!important;justify-content:center!important;align-self:center!important;align-items:center!important;gap:.5rem 1.75rem!important;width:auto!important;max-width:100%!important;min-height:0!important;margin:0!important;padding:.75rem 0 0!important;list-style:none!important;display:inline-flex!important}
+
+.scraped-root .widget-footer ul[data-ux=NavFooter]>li{margin:0!important;display:block!important}
+
+.scraped-root .widget-footer a[data-ux=NavFooterLink]{color:#b2603b!important;min-width:0!important;padding-bottom:0!important;padding-left:0!important;font-family:Poppins,arial,sans-serif!important;font-size:1.0625rem!important;font-weight:400!important;text-decoration:none!important}
+
+.scraped-root .widget-footer a[data-ux=NavFooterLink]:hover{color:#8b4a2d!important}
+
+.scraped-root .widget-footer [data-ux=Layout]>hr[data-ux=HR]{border:0!important;border-top:1px solid #00000014!important;flex-grow:0!important;flex-basis:auto!important;width:100%!important;max-width:36rem!important;height:0!important;max-height:none!important;margin:.875rem auto .5rem!important;padding:0!important}
+
+.scraped-root .widget-footer [data-ux=Layout]>div[data-ux=Block]:has([data-aid=FOOTER_POWERED_BY_AIRO_RENDERED]){text-align:center!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;margin-top:0!important;padding-top:0!important;display:flex!important}
+
+.scraped-root .widget-cookie-banner{z-index:10020;bottom:0;left:0;right:0;width:100%!important;max-width:none!important;margin:0!important;position:fixed!important}
+
+.scraped-shop-page .widget-cookie-banner{display:none!important}
+
+.scraped-shop-page .bst-shop-storefront{width:100%;max-width:1160px;margin-left:auto;margin-right:auto;padding:8px 20px 24px;flex-flow:column!important;align-items:stretch!important;display:flex!important}
+
+.scraped-shop-page .bst-shop-toolbar{border-bottom:1px solid #0000001a;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-bottom:8px;padding:20px 0 22px;display:flex}
+
+.scraped-shop-page .bst-shop-toolbar-title{color:#1b1b1b;margin:0;font-family:Poppins,arial,sans-serif;font-size:1.125rem;font-weight:400}
+
+.scraped-shop-page .bst-shop-toolbar-sort{justify-content:flex-end;align-items:flex-start;display:flex}
+
+.scraped-shop-page .bst-shop-sort-dropdown{text-align:right;position:relative}
+
+.scraped-shop-page .bst-shop-sort-trigger{cursor:pointer;color:#2a2a2a;-webkit-user-select:none;user-select:none;align-items:center;gap:8px;margin:0;padding:4px 2px;font-family:Poppins,arial,sans-serif;font-size:14px;font-weight:400;list-style:none;display:inline-flex}
+
+.scraped-shop-page .bst-shop-sort-trigger::-webkit-details-marker{display:none}
+
+.scraped-shop-page .bst-shop-sort-trigger::marker{display:none}
+
+.scraped-shop-page .bst-shop-sort-trigger-label{white-space:nowrap}
+
+.scraped-shop-page .bst-shop-sort-caret{border-top:6px solid #373737;border-left:5px solid #0000;border-right:5px solid #0000;flex-shrink:0;width:0;height:0;transition:transform .15s;display:inline-block}
+
+.scraped-shop-page .bst-shop-sort-dropdown[open] .bst-shop-sort-caret{transform:rotate(180deg)}
+
+.scraped-shop-page .bst-shop-sort-menu{z-index:30;background:#fff;border:1px solid #00000024;border-radius:4px;min-width:232px;margin:0;padding:8px 0;list-style:none;position:absolute;top:calc(100% + 8px);right:0;box-shadow:0 10px 28px #0000001a,0 2px 8px #0000000f}
+
+.scraped-shop-page .bst-shop-sort-option{color:#2a2a2a;text-align:left;cursor:pointer;background:0 0;border:none;width:100%;margin:0;padding:10px 18px;font-family:Poppins,arial,sans-serif;font-size:14px;font-weight:400;line-height:1.35;display:block}
+
+.scraped-shop-page .bst-shop-sort-option:hover{background:#0000000a}
+
+.scraped-shop-page .bst-shop-sort-option.is-active{color:#b4653c}
+
+.scraped-shop-page .bst-shop-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:28px 24px;padding-top:8px;display:grid}
+
+@media (max-width:900px){.scraped-shop-page .bst-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+@media (max-width:520px){.scraped-shop-page .bst-shop-grid{grid-template-columns:minmax(0,1fr)}}
+
+.scraped-shop-page .bst-shop-card{background:#fff;flex-direction:column;min-width:0;height:auto;display:flex}
+
+.scraped-shop-page .bst-shop-card-imgwrap{overflow:hidden}
+
+.scraped-shop-page .bst-shop-card-imgwrap img{aspect-ratio:1;object-fit:cover;width:100%;height:auto;display:block}
+
+.scraped-shop-page .bst-shop-card-title{color:#1b1b1b;margin:16px 0 4px;font-family:Poppins,arial,sans-serif;font-size:15px;font-weight:400;line-height:1.35}
+
+.scraped-shop-page .bst-shop-card-price{color:#575757;margin:0;padding-bottom:4px;font-family:Poppins,arial,sans-serif;font-size:14px;font-weight:400}
+
+.scraped-root p[data-aid=FOOTER_POWERED_BY_AIRO_RENDERED]{flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;display:flex;box-sizing:border-box!important;text-align:center!important;width:100%!important;max-width:100%!important;margin-left:auto!important;margin-right:auto!important}
