@@ -67,3 +67,4 @@ For Google sign in:
 - Use only the publishable key in browser code
 - Add a `service_role` key only if you later need trusted server-side admin access
 - Leave the dashboard public unless you intentionally want protected routes later
+ - Leave the application's user-facing dashboard public by default unless you require authentication for parts of your app; the Supabase admin dashboard (project console) should always remain protected and never be exposed publicly.

@@ -4,6 +4,10 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
+}
+
 export function LoginForm() {
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
@@ -35,19 +39,24 @@ export function LoginForm() {
 
     setPending(true);
     const supabase = createBrowserSupabaseClient();
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    setPending(false);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      setMessage(error.message);
-      return;
+      if (error) {
+        setMessage(error.message);
+        return;
+      }
+
+      router.replace("/");
+      router.refresh();
+    } catch (err) {
+      setMessage(getErrorMessage(err));
+    } finally {
+      setPending(false);
     }
-
-    router.replace("/");
-    router.refresh();
   }
 
   async function handleGoogleSignIn() {
@@ -56,17 +65,21 @@ export function LoginForm() {
 
     const supabase = createBrowserSupabaseClient();
     const redirectTo = `${window.location.origin}/auth/callback?next=/`;
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo,
-      },
-    });
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo,
+        },
+      });
 
-    setGooglePending(false);
-
-    if (error) {
-      setMessage(error.message);
+      if (error) {
+        setMessage(error.message);
+      }
+    } catch (err) {
+      setMessage(getErrorMessage(err));
+    } finally {
+      setGooglePending(false);
     }
   }
 
@@ -105,7 +118,7 @@ export function LoginForm() {
       ) : null}
 
       <div className="auth-form__actions">
-        <button className="auth-form__button" type="submit" disabled={pending}>
+        <button className="auth-form__button" type="submit" disabled={pending || googlePending}>
           {pending ? "Signing in..." : "Sign in"}
         </button>
         <button

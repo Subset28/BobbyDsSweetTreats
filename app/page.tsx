@@ -1,15 +1,16 @@
 import { ScrapedHtml } from "@/components/ScrapedHtml";
 import { loadScrapedBody } from "@/lib/loadScrapedBody";
 
-export default function Home({
+export default async function Home({
   searchParams,
 }: {
-  searchParams?: {
+  searchParams?: Promise<{
     signup?: string;
-  };
+  }>;
 }) {
+  const resolvedSearchParams = (await searchParams) ?? {};
   const html = loadScrapedBody("home-body-inner.html");
-  const needsEmailCheck = searchParams?.signup === "check-email";
+  const needsEmailCheck = resolvedSearchParams.signup === "check-email";
 
   return (
     <>

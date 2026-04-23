@@ -4,6 +4,10 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
+}
+
 export function SignupForm() {
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
@@ -35,7 +39,9 @@ export function SignupForm() {
       return;
     }
 
-    if (!email.includes("@")) {
+    // basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       setMessage("Enter a valid email address.");
       return;
     }
@@ -63,31 +69,36 @@ export function SignupForm() {
     setPending(true);
     const supabase = createBrowserSupabaseClient();
     const redirectTo = `${window.location.origin}/auth/callback?next=/`;
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectTo,
-        data: {
-          name,
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectTo,
+          data: {
+            name,
+          },
         },
-      },
-    });
-    setPending(false);
+      });
 
-    if (error) {
-      setMessage(error.message);
-      return;
-    }
+      if (error) {
+        setMessage(error.message);
+        return;
+      }
 
-    if (data.session) {
-      router.replace("/");
+      if (data.session) {
+        router.replace("/");
+        router.refresh();
+        return;
+      }
+
+      router.replace("/?signup=check-email");
       router.refresh();
-      return;
+    } catch (err) {
+      setMessage(getErrorMessage(err));
+    } finally {
+      setPending(false);
     }
-
-    router.replace("/?signup=check-email");
-    router.refresh();
   }
 
   async function handleGoogleSignIn() {
@@ -96,17 +107,21 @@ export function SignupForm() {
 
     const supabase = createBrowserSupabaseClient();
     const redirectTo = `${window.location.origin}/auth/callback?next=/`;
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo,
-      },
-    });
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo,
+        },
+      });
 
-    setGooglePending(false);
-
-    if (error) {
-      setMessage(error.message);
+      if (error) {
+        setMessage(error.message);
+      }
+    } catch (err) {
+      setMessage(getErrorMessage(err));
+    } finally {
+      setGooglePending(false);
     }
   }
 
@@ -169,7 +184,7 @@ export function SignupForm() {
       ) : null}
 
       <div className="auth-form__actions">
-        <button className="auth-form__button" type="submit" disabled={pending}>
+        <button className="auth-form__button" type="submit" disabled={pending || googlePending}>
           {pending ? "Creating account..." : "Create account"}
         </button>
         <button
