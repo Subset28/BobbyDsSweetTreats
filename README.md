@@ -34,3 +34,36 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Supabase Auth
+
+This project now includes:
+
+- Email and password sign in and sign up
+- Google OAuth sign in
+
+### Environment variables
+
+Copy `.env.example` to `.env.local` for local development.
+
+The public Supabase URL and publishable key are safe to expose in client-side code, but any `service_role` key must stay server-only and should never be committed.
+
+### Supabase setup
+
+In your Supabase project, configure:
+
+- Site URL: `http://localhost:3000` for local dev and your production domain
+- Redirect URLs: `http://localhost:3000/auth/callback` and `https://your-domain.com/auth/callback`
+
+For Google sign in:
+
+- Enable the Google provider in Supabase Auth
+- Create a Google OAuth client in Google Cloud
+- Add the Supabase callback URL to the Google OAuth redirect URI list
+
+### Recommended security defaults
+
+- Keep email confirmation enabled for public signups
+- Use only the publishable key in browser code
+- Add a `service_role` key only if you later need trusted server-side admin access
+- Leave the dashboard public unless you intentionally want protected routes later
