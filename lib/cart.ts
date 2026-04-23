@@ -71,7 +71,8 @@ export function readCart(storage?: Storage): CartItem[] {
   if (!cartStorage) return [];
 
   try {
-    const parsed = JSON.parse(cartStorage.getItem(CART_STORAGE_KEY) || "[]") as unknown[];
+    const parsed = JSON.parse(cartStorage.getItem(CART_STORAGE_KEY) || "[]");
+    if (!Array.isArray(parsed)) return [];
     return parsed.map(normalizeCartItem).filter(Boolean) as CartItem[];
   } catch {
     return [];

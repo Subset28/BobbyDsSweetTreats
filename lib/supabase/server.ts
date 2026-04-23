@@ -15,7 +15,14 @@ export async function createServerSupabaseClient() {
       },
       setAll(cookiesToSet) {
         cookiesToSet.forEach(({ name, value, options }) => {
-          cookieStore.set(name, value, options);
+          try {
+            cookieStore.set(name, value, options as any);
+          } catch (err) {
+            // Guard: in some environments cookieStore may be read-only or throw
+            // swallowing is safe here because cookie sync is best-effort.
+            // eslint-disable-next-line no-console
+            console.warn("Failed to set cookie in server cookie store", name, err);
+          }
         });
       },
     },

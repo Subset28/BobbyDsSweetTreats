@@ -109,7 +109,7 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
   {
     slug: "heart-shaped-brownies",
     title: "Heart-Shaped Brownies",
-    description: "A delightful assortment of heart-shaped cookies with various messages.",
+    description: "A delightful assortment of heart-shaped brownies, perfect for gifting or snacking.",
     price: 21,
     image:
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/IMG_20260127_220352-11ae0be.png",
@@ -267,9 +267,11 @@ export function getProductSlugByText(text: string): string | null {
   if (!normalized) return null;
 
   for (const [alias, slug] of ALIAS_LOOKUP.entries()) {
-    if (normalized === alias || normalized.includes(alias) || alias.includes(normalized)) {
-      return slug;
-    }
+    if (!alias) continue;
+    if (normalized === alias) return slug;
+    // Prefer exact or long-prefix matches to avoid accidental short substring collisions
+    if (alias.startsWith(normalized) && normalized.length > 2) return slug;
+    if (alias.includes(normalized) && normalized.length > 3) return slug;
   }
 
   const rules: Array<[RegExp, string]> = [
@@ -281,7 +283,7 @@ export function getProductSlugByText(text: string): string | null {
     [/pretzel/, "chocolate-covered-pretzels"],
     [/brownie/, "heart-shaped-brownies"],
     [/strawberry bouquet/, "chocolate-strawberry-bouquet"],
-    [/gift box|strawberries/, "chocolate-covered-strawberries-gift-box"],
+    [/gift box/, "chocolate-covered-strawberries-gift-box"],
     [/oreo/, "chocolate-covered-oreos"],
     [/chocolate bark|bark/, "valentines-day-chocolate-bark"],
     [/peanut butter/, "chocolate-covered-peanut-butter-balls"],

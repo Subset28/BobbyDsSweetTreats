@@ -116,13 +116,23 @@ export function ScrapedHtml({ html, className }: Props) {
 
       for (const selector of promoMarkers) {
         rootElement.querySelectorAll(selector).forEach((node) => {
-          let el = node as HTMLElement;
-          while (el.parentElement) {
-            const parent = el.parentElement as HTMLElement;
-            if (parent.querySelector('[data-aid="HEADER_NAV_RENDERED"]')) break;
-            el = parent;
+          try {
+            let el = node as HTMLElement;
+            let depth = 0;
+            const maxDepth = 6;
+            while (el.parentElement && depth < maxDepth) {
+              const parent = el.parentElement as HTMLElement;
+              if (parent.querySelector('[data-aid="HEADER_NAV_RENDERED"]')) break;
+              el = parent;
+              depth++;
+            }
+            // Safety: only remove if we didn't climb past the root element or body
+            if (el && el !== rootElement && el !== document.body && el.parentElement) {
+              el.remove();
+            }
+          } catch {
+            // ignore individual failures
           }
-          el.remove();
         });
       }
 

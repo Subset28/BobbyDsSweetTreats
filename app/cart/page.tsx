@@ -74,7 +74,7 @@ export default function CartPage() {
           <div className="bst-cart-page__layout">
             <ul className="bst-cart-page__list">
               {cart.map((item, index) => (
-                <li key={`${item.id}-${index}`} className="bst-cart-page__item">
+                <li key={item.id} className="bst-cart-page__item">
                   {item.imageSrc ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img className="bst-cart-page__thumb" src={item.imageSrc} alt={item.title} />
@@ -91,11 +91,19 @@ export default function CartPage() {
                     </div>
                     <div className="bst-cart-page__item-controls">
                       <div className="bst-cart-page__quantity">
-                        <button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                        <button
+                          type="button"
+                          aria-label={`Decrease quantity for ${item.title || item.id}`}
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        >
                           -
                         </button>
                         <span>{item.quantity}</span>
-                        <button type="button" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                        <button
+                          type="button"
+                          aria-label={`Increase quantity for ${item.title || item.id}`}
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        >
                           +
                         </button>
                       </div>

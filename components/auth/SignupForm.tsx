@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useRef, useEffect, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
@@ -13,6 +13,13 @@ export function SignupForm() {
   const [message, setMessage] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [googlePending, setGooglePending] = useState(false);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   async function handleEmailPasswordSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -97,7 +104,7 @@ export function SignupForm() {
     } catch (err) {
       setMessage(getErrorMessage(err));
     } finally {
-      setPending(false);
+      if (isMounted.current) setPending(false);
     }
   }
 
@@ -121,7 +128,7 @@ export function SignupForm() {
     } catch (err) {
       setMessage(getErrorMessage(err));
     } finally {
-      setGooglePending(false);
+      if (isMounted.current) setGooglePending(false);
     }
   }
 

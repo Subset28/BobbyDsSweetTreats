@@ -34,22 +34,26 @@ export function ProductDetailClient({ product }: Props) {
 
   const handleAdd = () => {
     if (!variant) return;
+    try {
+      const cart = readCart();
+      const next = addToCart(cart, {
+        slug: product.slug,
+        title: product.title,
+        variantId: variant.id,
+        variantLabel: variant.label,
+        price: variant.price,
+        quantity,
+        imageSrc: product.image,
+        description: product.description,
+      });
 
-    const cart = readCart();
-    const next = addToCart(cart, {
-      slug: product.slug,
-      title: product.title,
-      variantId: variant.id,
-      variantLabel: variant.label,
-      price: variant.price,
-      quantity,
-      imageSrc: product.image,
-      description: product.description,
-    });
-
-    saveCart(next);
-    emitCartChange(next);
-    setNotice(`${product.title} added to your cart.`);
+      saveCart(next);
+      emitCartChange(next);
+      setNotice(`${product.title} added to your cart.`);
+    } catch (err) {
+      console.error("Failed to add to cart", err);
+      setNotice("Unable to add item to cart. Please try again.");
+    }
   };
 
   return (
@@ -66,7 +70,7 @@ export function ProductDetailClient({ product }: Props) {
 
       <div className="bst-product-detail__field">
         <div className="bst-product-detail__label">Size</div>
-        <div className="bst-product-detail__variant-list" role="radiogroup" aria-label="Size options">
+        <div className="bst-product-detail__variant-list" role="group" aria-label="Size options">
           {product.variants.map((entry) => (
             <button
               key={entry.id}

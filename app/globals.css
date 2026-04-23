@@ -399,6 +399,24 @@ html[data-theme=dark] .auth-page__panel--brand{background:linear-gradient(160deg
 
 .auth-page__footer{color:var(--site-muted)}
 
+/* Utilities and accessible focus styles */
+.sr-only{position:absolute;border:0;padding:0;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;clip-path:inset(50%);margin:-1px}
+
+/* Product quantity controls focus */
+.bst-product-detail__quantity button:focus,.bst-product-detail__quantity button:focus-visible{
+	outline: none;
+	box-shadow: 0 0 0 4px color-mix(in srgb,var(--site-accent) 26%, transparent);
+	border-radius: 999px;
+}
+
+/* Cart controls focus */
+.bst-cart-page__quantity button:focus,.bst-cart-page__quantity button:focus-visible,
+.bst-cart-page__remove:focus,.bst-cart-page__remove:focus-visible{
+	outline: none;
+	box-shadow: 0 0 0 4px color-mix(in srgb,var(--site-accent) 26%, transparent);
+	border-radius: 8px;
+}
+
 .auth-page__footer a{color:var(--site-link)}
 
 .auth-notice{background:var(--site-surface-alt);border-bottom:1px solid var(--site-border);color:var(--site-fg)}
