@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
+import { getProductPath, getProductPathByText } from "@/lib/productCatalog";
+
 type Props = { html: string; className?: string };
 
 /** Full-width block wrapper; avoid `display: contents` (flex bugs in some engines). */
@@ -22,6 +24,35 @@ export function ScrapedHtml({ html, className }: Props) {
       try {
         const href = a.getAttribute("href") || "";
         const text = (a.textContent || "").trim().toLowerCase();
+        const productMatch = href.match(/\/shop\/ols\/products\/([^/?#]+)/i);
+        if (productMatch) {
+          a.dataset.originalHref = href;
+          a.setAttribute("href", getProductPath(productMatch[1]));
+          a.setAttribute("data-product-link", "true");
+          return;
+        }
+
+        const productPath = getProductPathByText(a.textContent || "");
+        if (
+          productPath &&
+          (a.closest(".bst-featured-card") ||
+            a.closest(".bst-shop-card") ||
+            a.getAttribute("data-aid")?.includes("PRODUCT") ||
+            a.getAttribute("data-aid")?.includes("MENU_ITEM") ||
+            text === "strawberries" ||
+            text.includes("cake pop") ||
+            text.includes("brownie") ||
+            text.includes("oreo") ||
+            text.includes("pretzel") ||
+            text.includes("bark") ||
+            text.includes("bouquet"))
+        ) {
+          a.dataset.originalHref = href;
+          a.setAttribute("href", productPath);
+          a.setAttribute("data-product-link", "true");
+          return;
+        }
+
         if (
           href === "/m/account" ||
           href === "/m/orders" ||

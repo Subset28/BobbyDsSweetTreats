@@ -1,4 +1,5 @@
 import { SHOP_PRODUCTS } from "./shopProducts";
+import { getProductPathByText } from "./productCatalog";
 
 /** Empty OLS mount: breadcrumb + blank block (products load only via GoDaddy JS). */
 const EMPTY_OLS =
@@ -18,7 +19,7 @@ function escAttr(s: string): string {
 function shopGridHtml(): string {
   const cards = SHOP_PRODUCTS.map(
     (p, index) =>
-      `<article class="bst-shop-card" data-initial-index="${index}"><div class="bst-shop-card-imgwrap"><img src="${escAttr(p.imageSrc)}" alt="${escAttr(p.title)}" width="400" height="400" loading="lazy" decoding="async"/></div><h3 class="bst-shop-card-title">${escAttr(p.title)}</h3><p class="bst-shop-card-price">${escAttr(p.price)}</p></article>`,
+      `<a href="${escAttr(getProductPathByText(p.title) ?? "/shop")}" class="bst-shop-card" data-initial-index="${index}" aria-label="${escAttr(p.title)}" style="text-decoration:none;color:inherit"><div class="bst-shop-card-imgwrap"><img src="${escAttr(p.imageSrc)}" alt="${escAttr(p.title)}" width="400" height="400" loading="lazy" decoding="async"/></div><h3 class="bst-shop-card-title">${escAttr(p.title)}</h3><p class="bst-shop-card-price">${escAttr(p.price)}</p></a>`,
   ).join("");
   return `<div class="bst-shop-grid">${cards}</div>`;
 }

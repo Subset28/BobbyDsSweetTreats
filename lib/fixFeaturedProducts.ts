@@ -1,3 +1,5 @@
+import { getProductPathByText } from "./productCatalog";
+
 const FEATURED_LOADER =
   /<div data-ux="Block" data-aid="PRODUCT_GROUP_LIST_RENDERED"[^>]*><div data-ux="Block"[^>]*><div data-ux="Block"[^>]*><\/div><div data-ux="Block"[^>]*><div data-ux="Loader"[\s\S]*?<\/div><\/div><\/div><\/div><\/div>/;
 
@@ -29,7 +31,8 @@ const CARDS: Card[] = [
 ];
 
 function cardHtml(c: Card): string {
-  return `<div class="bst-featured-card x-el x-el-div c1-1 c1-2 c1-b c1-c c1-d c1-e c1-f c1-g"><a href="/shop" class="x-el x-el-a c1-1q" style="text-decoration:none;color:inherit"><div class="bst-featured-card-imgwrap"><img src="${c.src}" alt="" width="400" height="320" loading="lazy" decoding="async" class="x-el x-el-img c1-1 c1-2 c1-4 c1-z" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:4px"/></div><h3 class="x-el x-el-h3 c1-1 c1-2 c1-1t c1-5p" style="margin:12px 0 4px;font-size:1.05rem">${c.title}</h3><p class="x-el x-el-p c1-1 c1-2 c1-4p" style="margin:0;color:rgb(87,87,87)">${c.price}</p></a></div>`;
+  const href = getProductPathByText(c.title) ?? "/shop";
+  return `<div class="bst-featured-card x-el x-el-div c1-1 c1-2 c1-b c1-c c1-d c1-e c1-f c1-g"><a href="${href}" class="x-el x-el-a c1-1q" style="text-decoration:none;color:inherit"><div class="bst-featured-card-imgwrap"><img src="${c.src}" alt="" width="400" height="320" loading="lazy" decoding="async" class="x-el x-el-img c1-1 c1-2 c1-4 c1-z" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:4px"/></div><h3 class="x-el x-el-h3 c1-1 c1-2 c1-1t c1-5p" style="margin:12px 0 4px;font-size:1.05rem">${c.title}</h3><p class="x-el x-el-p c1-1 c1-2 c1-4p" style="margin:0;color:rgb(87,87,87)">${c.price}</p></a></div>`;
 }
 
 function featuredInnerHtml(): string {
