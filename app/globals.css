@@ -1,4 +1,4 @@
-/* Site overrides — loaded after godaddy-all.css in app/layout.tsx */
+/* Site overrides — loaded after the storefront baseline in app/layout.tsx */
 
 html{scrollbar-gutter:stable}html,body{margin:0}
 
