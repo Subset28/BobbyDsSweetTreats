@@ -2,6 +2,14 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 
+type RequestCookie = ReturnType<NextRequest["cookies"]["getAll"]>[number];
+type CookieSetOptions = Parameters<NextResponse["cookies"]["set"]>[2];
+type QueuedCookie = {
+  name: string;
+  value: string;
+  options?: CookieSetOptions;
+};
+
 export async function proxy(request: NextRequest) {
   let supabaseUrl: string;
   let supabaseKey: string;
@@ -20,20 +28,20 @@ export async function proxy(request: NextRequest) {
   // Supabase during auth operations and apply them to both the downstream
   // request headers and the outgoing response.
   const reqHeaders = new Headers(request.headers);
-  const originalCookies = request.cookies.getAll() || [];
-  const cookieQueue: Array<{ name: string; value: string; options?: any }> = [];
+  const originalCookies = request.cookies.getAll() as RequestCookie[];
+  const cookieQueue: QueuedCookie[] = [];
 
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
       getAll() {
         // Merge original cookies with any that were queued (queue wins by name)
-        const merged = [...originalCookies];
+        const merged: RequestCookie[] = [...originalCookies];
         for (const c of cookieQueue) {
           const idx = merged.findIndex((m) => m.name === c.name);
-          if (idx !== -1) merged[idx] = c as any;
-          else merged.push(c as any);
+          if (idx !== -1) merged[idx] = c as RequestCookie;
+          else merged.push(c as RequestCookie);
         }
-        return merged as any;
+        return merged;
       },
       setAll(cookiesToSet) {
         // Defer applying to the response until after auth completes.
@@ -51,8 +59,8 @@ export async function proxy(request: NextRequest) {
   const mergedCookies = [...originalCookies];
   for (const c of cookieQueue) {
     const idx = mergedCookies.findIndex((m) => m.name === c.name);
-    if (idx !== -1) mergedCookies[idx] = c as any;
-    else mergedCookies.push(c as any);
+    if (idx !== -1) mergedCookies[idx] = c as RequestCookie;
+    else mergedCookies.push(c as RequestCookie);
   }
   const cookieHeader = mergedCookies.map((c) => `${c.name}=${c.value}`).join("; ");
   if (cookieHeader) reqHeaders.set("cookie", cookieHeader);
@@ -65,7 +73,6 @@ export async function proxy(request: NextRequest) {
       response.cookies.set(c.name, c.value, c.options);
     } catch (err) {
       // best-effort
-      // eslint-disable-next-line no-console
       console.warn("Failed to set cookie on response", c.name, err);
     }
   }
