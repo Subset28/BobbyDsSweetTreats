@@ -17,10 +17,10 @@ import { mergeCanonicalChrome } from "./mergeCanonicalChrome";
 
 const HOME_BODY = "home-body-inner.html";
 
-const SCRAPED_DIR = path.join(process.cwd(), "scraped");
+const CONTENT_DIR = path.join(process.cwd(), "content");
 
 function readScraped(filename: string): string {
-  return fs.readFileSync(path.join(SCRAPED_DIR, filename), "utf8");
+  return fs.readFileSync(path.join(CONTENT_DIR, filename), "utf8");
 }
 
 /** Transforms that may touch header, main, or footer on a single scrape file. */

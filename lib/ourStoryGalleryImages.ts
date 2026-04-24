@@ -1,16 +1,22 @@
-const IP =
-  "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433";
-
-/** Canonical GoDaddy image bases (gallery JSON is not in SSR HTML); order matches the live “Delicious creations” set. */
-export const OUR_STORY_GALLERY_BASES: readonly string[] = [
-  `${IP}/IMG_20260205_205331_(2)-6e4c3d9.jpg`,
-  `${IP}/IMG_20260205_201533_(6).jpg`,
-  `${IP}/IMG_20260207_195502.jpg`,
-  `${IP}/IMG_20260127_220351_(2).jpg`,
-  `${IP}/Strawberry-Shortcake-1.jpg`,
-  `${IP}/chocolate_covered_oreos_recipe.jpg`,
-  `${IP}/Chocolate%20crunch%20cake%20pop.jpg`,
-  `${IP}/Confetti.jpg`,
-  `${IP}/Vanilla.jpg`,
-  `${IP}/Strawberry%203.jpg`,
+/** Local carousel images owned by this repo. */
+export const OUR_STORY_GALLERY_IMAGES: readonly string[] = [
+  "/site-media/65432ac9a982eeca.jpg",
+  "/site-media/92d53f36847752a8.jpg",
+  "/site-media/10485f9f1539909c.jpg",
+  "/site-media/32c55f0c1e387a56.jpg",
+  "/site-media/6a5496871fefec40.jpg",
+  "/site-media/0a652586ca168292.jpg",
+  "/site-media/d53c813db8fb2eeb.jpg",
+  "/site-media/41a53fb16b135233.jpg",
+  "/site-media/56f5e476231a2b2e.jpg",
+  "/site-media/83a31b2892fe9273.jpg",
+  "/carousel-pictures/carousel-01.webp",
+  "/carousel-pictures/carousel-02.webp",
+  "/carousel-pictures/carousel-03.webp",
+  "/carousel-pictures/carousel-04.webp",
+  "/carousel-pictures/carousel-05.webp",
+  "/carousel-pictures/carousel-06.webp",
+  "/carousel-pictures/carousel-07.webp",
+  "/carousel-pictures/carousel-08.webp",
+  "/carousel-pictures/carousel-09.webp",
 ];
