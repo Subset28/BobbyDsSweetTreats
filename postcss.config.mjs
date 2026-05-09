@@ -1,4 +1,4 @@
-/** GoDaddy export CSS is not compatible with Tailwind's parser; use plain CSS. */
+/** Vendor storefront CSS bundles are not compatible with Tailwind's parser; use plain CSS. */
 const config = {
   plugins: {},
 };

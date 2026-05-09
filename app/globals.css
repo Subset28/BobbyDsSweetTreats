@@ -78,6 +78,52 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 
 .auth-notice{position:sticky;top:0;z-index:40;margin:0;padding:12px 18px;background:#fff3e9;border-bottom:1px solid #f1c8ab;color:#8b4528;font-family:Cantarell,Arial,sans-serif;line-height:1.5;text-align:center}
 
+.membership-page{min-height:100vh;display:grid;place-items:center;padding:48px 20px;background:radial-gradient(circle at top,#fff 0,#fff8f2 45%,#fff4ea 100%);position:relative;overflow:hidden}
+
+.membership-page__backdrop{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 12%,#ffd9c040 0,transparent 42%),radial-gradient(circle at 88% 78%,#f4b08d35 0,transparent 48%)}
+
+.membership-page__section{position:relative;z-index:1;width:min(984px,100%)}
+
+.membership-page__container{margin:0 auto;width:min(608px,100%);padding:40px 36px;background:#fff;border:1px solid #e7d7cc;border-radius:2px;box-shadow:0 18px 48px #b86a3520}
+
+.membership-page__eyebrow{margin:0 0 12px;font-family:Poppins,Arial,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;color:#6b4e40}
+
+.membership-page__title{margin:0;font-family:Poppins,Arial,sans-serif;font-size:1.75rem;font-weight:700;letter-spacing:.06em;color:#24150f}
+
+.membership-page__intro{margin:16px 0 0;font-family:Cantarell,Arial,sans-serif;font-size:1rem;line-height:1.5;color:#4a3429}
+
+.membership-page__body{margin-top:28px}
+
+.membership-page__links-row{margin-top:28px;display:grid;gap:12px}
+
+.membership-page__meta{margin:0;font-family:Cantarell,Arial,sans-serif;font-size:.98rem;line-height:1.55;color:#6b4e40;text-align:center}
+
+.membership-page__meta a{color:#a64f2a;font-weight:700;text-decoration:none}
+
+.membership-page__meta a:hover{text-decoration:underline}
+
+.membership-page__meta a:focus-visible{outline:none;box-shadow:0 0 0 4px #d56f4020;border-radius:4px}
+
+.membership-page__empty{margin:0;font-family:Cantarell,Arial,sans-serif;font-size:1rem;line-height:1.55;color:#5c4338;text-align:center}
+
+.membership-form{display:grid;gap:18px}
+
+.membership-form__input{border-radius:2px!important;padding:16px 14px!important}
+
+.membership-form__actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+
+.membership-form__submit{appearance:none;border:0;border-radius:2px;background:linear-gradient(135deg,#8e4728,#d56f40);color:#fff;cursor:pointer;min-height:56px;min-width:136px;padding:0 28px;font-family:Poppins,Arial,sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 10px 22px #b96b3830;transition:opacity .15s ease,transform .15s ease}
+
+.membership-form__submit:hover:not(:disabled){transform:translateY(-1px)}
+
+.membership-form__submit:disabled{cursor:not-allowed;opacity:.72}
+
+.membership-form__submit:focus:not(:disabled),.membership-form__submit:focus-visible:not(:disabled){outline:none;box-shadow:0 10px 22px #b96b3830,0 0 0 4px #d56f4033}
+
+.membership-form__success{margin:0;padding:16px;border-radius:8px;background:#f6fff8;border:1px solid #c8e6d4;color:#2d5a3d;font-family:Cantarell,Arial,sans-serif;line-height:1.55;text-align:center}
+
+@media (max-width:520px){.membership-page{padding:28px 16px}.membership-page__container{padding:28px 20px}.membership-form__submit{width:100%}}
+
 .scraped-root:not(.scraped-shop-page) .page-inner{min-height:100vh}
 
 .scraped-root{width:100%;min-width:0}
@@ -91,6 +137,11 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 .scraped-root .widget-header [data-aid=SEARCH_FORM_RENDERED]{flex-shrink:0!important;min-width:40px!important}
 
 @media (min-width:1024px){.scraped-root nav:has([data-aid=HAMBURGER_MENU_LINK]){display:none!important}}
+
+/* Header 9 ships two logo blocks; without responsive breakpoint CSS both show. Match nav breakpoint (1024px). */
+@media (min-width:1024px){.scraped-root .widget-header [data-bst-header-logo=compact]{display:none!important}}
+
+@media (max-width:1023px){.scraped-root .widget-header [data-bst-header-logo=desktop]{display:none!important}}
 
 .scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul>li.nav-item>a{white-space:nowrap;text-transform:none!important;letter-spacing:normal!important;font-size:16px!important;font-weight:400!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;min-height:40px!important;padding-top:0!important;padding-bottom:4px!important}
 
@@ -154,15 +205,26 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 
 .scraped-shop-page #ols-shop-container{background:#fff}
 
+/* Fallback: hide home-only hero row on /shop (primary removal: stripShopHeaderPromo). */
+.scraped-root.scraped-shop-page section[data-aid="HEADER_SECTION"] [data-ux="Hero"],
+.scraped-root.scraped-shop-page section[data-aid="HEADER_SECTION"] figure:has(img[data-aid="BACKGROUND_IMAGE_RENDERED"]),
+.scraped-root.scraped-shop-page section[data-aid="HEADER_SECTION"] [data-aid="HEADER_TAGLINE_RENDERED"],
+.scraped-root.scraped-shop-page section[data-aid="HEADER_SECTION"] [data-aid="HEADER_TAGLINE2_RENDERED"],
+.scraped-root.scraped-shop-page section[data-aid="HEADER_SECTION"] [data-aid="HEADER_CTA_BTN"],
+.scraped-root.scraped-shop-page section[data-aid="HEADER_SECTION"] div[id^="tagline-container-"]{display:none!important}
+
 .scraped-root.scraped-shop-page .layout,.scraped-root.scraped-shop-page [data-ux=Page],.scraped-root.scraped-shop-page .page-inner{box-sizing:border-box;width:100%;max-width:none;min-height:0!important}
 
 .scraped-shop-page .widget-shop,.scraped-shop-page .widget-shop>[data-ux=Widget],.scraped-shop-page #bs-9,.scraped-shop-page #ols-shop-container,.scraped-shop-page #ols-shop-container>section[data-ux=Section],.scraped-shop-page #ols-shop-container [data-container-id=ols-shop]{box-sizing:border-box;width:100%;max-width:100%;min-height:0!important}
 
-.scraped-shop-page #ols-shop-container>section[data-ux=Section]{padding-top:24px!important;padding-bottom:12px!important}
+.scraped-shop-page #ols-shop-container>section[data-ux=Section]{padding-top:12px!important;padding-bottom:12px!important}
 
 @media (max-width:767px){.scraped-shop-page #ols-shop-container>section[data-ux=Section]{padding-bottom:10px!important}}
 
-.scraped-shop-page .widget-shop{margin-block-end:0!important;padding-block-end:0!important}
+.scraped-shop-page .widget-shop{margin-block-end:0!important;padding-block-end:0!important;margin-block-start:0!important}
+
+/* Tighten space below the header chrome on /shop (nav only, hero stripped). */
+.scraped-shop-page .widget-header section[data-aid="HEADER_SECTION"]{padding-bottom:0!important}
 
 .scraped-shop-page .widget-footer{margin-block-start:0!important}
 
@@ -203,25 +265,28 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 .scraped-shop-page .widget-popup,
 .scraped-shop-page .widget-popup-popup-1{display:none!important}
 
-.scraped-shop-page .bst-shop-storefront{width:100%;max-width:1160px;margin-left:auto;margin-right:auto;padding:8px 20px 24px;flex-flow:column!important;align-items:stretch!important;display:flex!important}
+/* Shop: pull listing under Home/Shop nav (tighter than default header nav block padding). */
+.scraped-shop-page .widget-header div[data-ux=Block]:has([id^=navBar-]){padding-bottom:8px!important}
 
-.scraped-shop-page .bst-shop-toolbar{border-bottom:1px solid #0000001a;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-bottom:8px;padding:20px 0 22px;display:flex}
+.scraped-shop-page .bst-shop-storefront{width:100%;max-width:1160px;margin-left:auto;margin-right:auto;padding:0 20px 24px;flex-flow:column!important;align-items:stretch!important;display:flex!important}
 
-.scraped-shop-page .bst-shop-toolbar-title{color:#1b1b1b;margin:0;font-family:Poppins,arial,sans-serif;font-size:1.125rem;font-weight:400}
+.scraped-shop-page .bst-shop-toolbar{border-bottom:0;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:4px;padding:10px 0 14px;display:flex}
 
-.scraped-shop-page .bst-shop-toolbar-sort{justify-content:flex-end;align-items:flex-start;display:flex}
+.scraped-shop-page .bst-shop-toolbar-title{color:#191919;margin:0;font-family:Poppins,arial,sans-serif;font-size:1.25rem;font-weight:500;line-height:1.3;letter-spacing:-.01em}
+
+.scraped-shop-page .bst-shop-toolbar-sort{justify-content:flex-end;align-items:center;display:flex}
 
 .scraped-shop-page .bst-shop-sort-dropdown{text-align:right;position:relative}
 
-.scraped-shop-page .bst-shop-sort-trigger{cursor:pointer;color:#2a2a2a;-webkit-user-select:none;user-select:none;align-items:center;gap:8px;margin:0;padding:4px 2px;font-family:Poppins,arial,sans-serif;font-size:14px;font-weight:400;list-style:none;display:inline-flex}
+.scraped-shop-page .bst-shop-sort-trigger{cursor:pointer;color:#575757;-webkit-user-select:none;user-select:none;align-items:center;gap:6px;margin:0;padding:2px 0;font-family:Poppins,arial,sans-serif;font-size:14px;font-weight:400;list-style:none;display:inline-flex}
 
 .scraped-shop-page .bst-shop-sort-trigger::-webkit-details-marker{display:none}
 
 .scraped-shop-page .bst-shop-sort-trigger::marker{display:none}
 
-.scraped-shop-page .bst-shop-sort-trigger-label{white-space:nowrap}
+.scraped-shop-page .bst-shop-sort-trigger-label{white-space:nowrap;font-weight:400}
 
-.scraped-shop-page .bst-shop-sort-caret{border-top:6px solid #373737;border-left:5px solid #0000;border-right:5px solid #0000;flex-shrink:0;width:0;height:0;transition:transform .15s;display:inline-block}
+.scraped-shop-page .bst-shop-sort-caret{border-top:5px solid #575757;border-left:4px solid #0000;border-right:4px solid #0000;flex-shrink:0;width:0;height:0;opacity:.9;transition:transform .15s;display:inline-block}
 
 .scraped-shop-page .bst-shop-sort-dropdown[open] .bst-shop-sort-caret{transform:rotate(180deg)}
 
@@ -233,7 +298,7 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 
 .scraped-shop-page .bst-shop-sort-option.is-active{color:#b4653c}
 
-.scraped-shop-page .bst-shop-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:28px 24px;padding-top:8px;display:grid}
+.scraped-shop-page .bst-shop-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:28px 24px;padding-top:4px;display:grid}
 
 @media (max-width:900px){.scraped-shop-page .bst-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
@@ -371,11 +436,106 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 
 .bst-cart-page__summary-row--total{color:var(--site-fg);font-weight:700;font-family:Poppins,Arial,sans-serif;font-size:1.02rem;padding-top:8px;border-top:1px solid var(--site-border)}
 
+.bst-cart-page__summary-note{margin:0;font-size:.82rem;line-height:1.55;color:var(--site-muted);font-family:Cantarell,Arial,sans-serif}
+
+.scraped-root .bst-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.scraped-root .bst-scraped-search-fallback{margin:0 0 18px;padding:14px 16px;background:var(--site-surface);border:1px solid var(--site-border);border-radius:14px;box-shadow:0 8px 28px var(--site-shadow)}
+.scraped-root .bst-scraped-search-fallback__form{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.scraped-root .bst-scraped-search-fallback input[type="search"]{flex:1;min-width:0;min-height:44px;padding:10px 14px;border-radius:10px;border:1px solid var(--site-border);font-family:Cantarell,Arial,sans-serif;font-size:1rem;background:var(--site-surface-alt);color:var(--site-fg)}
+.scraped-root .bst-scraped-search-fallback__submit{appearance:none;border:0;border-radius:999px;min-height:44px;padding:0 18px;font-family:Poppins,Arial,sans-serif;font-size:.92rem;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--site-accent-strong),var(--site-accent));color:#fff}
+
 .bst-cart-page__empty{background:var(--site-surface);border:1px solid var(--site-border);border-radius:24px;padding:28px;box-shadow:0 12px 36px var(--site-shadow);display:grid;gap:16px;justify-items:start}
 
 .bst-cart-page__empty p{margin:0;color:var(--site-muted);font-family:Cantarell,Arial,sans-serif}
 
 .bst-cart-page__button--secondary{border:1px solid var(--site-border);background:var(--site-surface-alt);color:var(--site-fg);box-shadow:none}
+
+/* Cart: mirror hosted OLS layout (table + orange checkout), not the bespoke card UI. */
+.scraped-shop-page .bst-ols-cart{max-width:960px;margin:0 auto;padding:8px 0 40px;font-family:Cantarell,Arial,sans-serif;color:#191919}
+
+.scraped-shop-page .bst-ols-cart__nav{margin:0 0 20px}
+
+.scraped-shop-page .bst-ols-cart__continue{color:#b4653c;font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:500;text-decoration:none}
+
+.scraped-shop-page .bst-ols-cart__continue:hover{text-decoration:underline}
+
+.scraped-shop-page .bst-ols-cart__empty{margin:28px 0;color:#575757;font-size:15px}
+
+.scraped-shop-page .bst-ols-cart__table-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.scraped-shop-page .bst-ols-cart__table{width:100%;border-collapse:collapse;min-width:520px}
+
+.scraped-shop-page .bst-ols-cart__table thead th{padding:10px 8px 14px;font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:700;color:#191919;border-bottom:1px solid #e8e8e8}
+
+.scraped-shop-page .bst-ols-cart__th-spacer{width:58%;text-align:left}
+
+.scraped-shop-page .bst-ols-cart__th-num{text-align:right;width:14%}
+
+.scraped-shop-page .bst-ols-cart__th-qty{text-align:center;width:14%}
+
+.scraped-shop-page .bst-ols-cart__table tbody td{padding:18px 8px;vertical-align:middle;border-bottom:1px solid #eee;font-size:14px;color:#2a2a2a}
+
+.scraped-shop-page .bst-ols-cart__td-unit,.scraped-shop-page .bst-ols-cart__td-line{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.scraped-shop-page .bst-ols-cart__td-qty{text-align:center}
+
+.scraped-shop-page .bst-ols-cart__product{display:flex;align-items:flex-start;gap:14px;max-width:420px}
+
+.scraped-shop-page .bst-ols-cart__thumb{flex-shrink:0;width:72px;height:72px;object-fit:cover;border-radius:2px;background:#f5f5f5}
+
+.scraped-shop-page .bst-ols-cart__thumb--placeholder{display:inline-block;width:72px;height:72px}
+
+.scraped-shop-page .bst-ols-cart__product-text{min-width:0}
+
+.scraped-shop-page .bst-ols-cart__title{font-family:Poppins,Arial,sans-serif;font-weight:600;font-size:15px;line-height:1.35;color:#191919}
+
+.scraped-shop-page .bst-ols-cart__variant{margin-top:4px;font-size:13px;color:#575757}
+
+.scraped-shop-page .bst-ols-cart__mobile-unit{display:none;margin-top:6px;font-size:14px;color:#575757}
+
+.scraped-shop-page .bst-ols-cart__qty-cell{display:inline-flex;align-items:center;gap:10px;justify-content:center}
+
+.scraped-shop-page .bst-ols-cart__qty-input{width:52px;min-height:36px;padding:4px 6px;border:1px solid #ccc;border-radius:2px;text-align:center;font-size:14px;font-family:inherit;background:#fff;color:#191919}
+
+.scraped-shop-page .bst-ols-cart__remove-x{appearance:none;border:0;background:transparent;color:#191919;font-size:22px;line-height:1;cursor:pointer;padding:4px;border-radius:2px}
+
+.scraped-shop-page .bst-ols-cart__remove-x:hover{background:#f2f2f2}
+
+.scraped-shop-page .bst-ols-cart__summary{margin-top:28px;text-align:right;max-width:420px;margin-left:auto;padding-right:2px}
+
+.scraped-shop-page .bst-ols-cart__totals{display:grid;gap:8px;margin-bottom:12px;font-size:15px;color:#2a2a2a}
+
+.scraped-shop-page .bst-ols-cart__subline{display:flex;justify-content:flex-end;align-items:baseline;gap:24px}
+
+.scraped-shop-page .bst-ols-cart__subline--grand{margin-top:6px;padding-top:10px;border-top:1px solid #e8e8e8;font-size:16px;color:#191919}
+
+.scraped-shop-page .bst-ols-cart__note{margin:0 0 16px;font-size:12px;line-height:1.5;color:#575757;text-align:right}
+
+.scraped-shop-page .bst-ols-cart__actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:16px;margin-bottom:16px}
+
+.scraped-shop-page .bst-ols-cart__linkish{appearance:none;border:0;background:transparent;color:#b4653c;font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:500;cursor:pointer;text-decoration:underline;padding:0}
+
+.scraped-shop-page .bst-ols-cart__checkout{appearance:none;border:0;border-radius:2px;background:#fe901d;color:#000;font-family:Poppins,Arial,sans-serif;font-size:15px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:14px min(120px,38vw);cursor:pointer;min-width:200px;box-shadow:0 2px 6px #00000014}
+
+.scraped-shop-page .bst-ols-cart__checkout:hover{filter:brightness(1.03)}
+
+@media (max-width:640px){
+.scraped-shop-page .bst-ols-cart__th-spacer{width:42%}
+.scraped-shop-page .bst-ols-cart__mobile-unit{display:block}
+.scraped-shop-page .bst-ols-cart__td-unit{display:none}
+.scraped-shop-page .bst-ols-cart__summary{max-width:none;text-align:left}
+.scraped-shop-page .bst-ols-cart__subline{justify-content:space-between}
+.scraped-shop-page .bst-ols-cart__note{text-align:left}
+.scraped-shop-page .bst-ols-cart__actions{justify-content:flex-start}
+.scraped-shop-page .bst-ols-cart__checkout{width:100%}
+}
+
+html[data-theme=dark] .scraped-shop-page .bst-ols-cart{color:var(--site-fg)}
+html[data-theme=dark] .scraped-shop-page .bst-ols-cart__table thead th{border-bottom-color:var(--site-border);color:var(--site-fg)}
+html[data-theme=dark] .scraped-shop-page .bst-ols-cart__table tbody td{border-bottom-color:var(--site-border);color:var(--site-muted)}
+html[data-theme=dark] .scraped-shop-page .bst-ols-cart__title{color:var(--site-fg)}
+html[data-theme=dark] .scraped-shop-page .bst-ols-cart__qty-input{background:var(--site-surface-alt);border-color:var(--site-border);color:var(--site-fg)}
+html[data-theme=dark] .scraped-shop-page .bst-ols-cart__checkout{background:var(--site-accent);color:#120f0e}
 
 @keyframes bst-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
@@ -388,6 +548,61 @@ html[data-theme=dark]{color-scheme:dark;--site-bg:#120f0e;--site-fg:#f7efe7;--si
 body{background:var(--site-bg);color:var(--site-fg);transition:background-color .2s ease,color .2s ease}
 
 .scraped-root{background:var(--site-bg);color:var(--site-fg)}
+
+/* Member/account dropdown: scoped to the person icon — search + cart share `UtilitiesMenu` and must not open the menu. */
+body.x .scraped-root span[id*="membership-icon"]{position:relative;z-index:55}
+
+body.x .scraped-root span[id*="membership-icon"] ul[role="menu"]{
+	display:none!important;
+	position:absolute!important;
+	right:0;top:calc(100% + 4px);
+	min-width:220px;margin:0;padding:8px 0;
+	list-style:none;
+	background:var(--site-surface);
+	border:1px solid var(--site-border);
+	border-radius:4px;
+	box-shadow:0 16px 40px var(--site-shadow);
+	z-index:80;
+}
+
+body.x .scraped-root span[id*="membership-icon"] ul[role="menu"] a{display:block;padding:10px 16px;font-family:Poppins,Arial,sans-serif;font-size:14px;color:var(--site-link)!important;text-decoration:none}
+
+body.x .scraped-root span[id*="membership-icon"] ul[role="menu"] a:hover{text-decoration:underline}
+
+body.x .scraped-root span[id*="membership-icon"]:hover ul[role="menu"],
+body.x .scraped-root span[id*="membership-icon"]:focus-within ul[role="menu"]{
+	display:block!important;
+	visibility:visible!important;
+	opacity:1!important;
+}
+
+/* Scraped membership routes ship both logged-in + logged-out trees; Firebase sets data-bst-auth on the root. */
+.scraped-root.scraped-membership-page:not([data-bst-auth="1"]) ul.membership-sign-in,
+.scraped-root.scraped-membership-page:not([data-bst-auth="1"]) .membership-icon-logged-in,
+.scraped-root.scraped-membership-page:not([data-bst-auth="1"]) .membership-header-logged-in,
+.scraped-root.scraped-membership-page:not([data-bst-auth="1"]) ul.membership-links-logged-in{display:none!important}
+
+.scraped-root.scraped-membership-page[data-bst-auth="1"] ul.membership-sign-out,
+.scraped-root.scraped-membership-page[data-bst-auth="1"] .membership-icon-logged-out,
+.scraped-root.scraped-membership-page[data-bst-auth="1"] ul.membership-links-logged-out{display:none!important}
+
+.scraped-root.scraped-membership-page p[data-aid="MEMBERSHIP_EMAIL_ADDRESS"]:empty{display:none!important}
+
+/* GoDaddy scraped SSO/create-account assumes runtime UX scripts; without them, nested controls can
+   collapse (inputs/buttons effectively missing). Scope under body.x so .x .c1-* utilities apply. */
+body.x .scraped-root.scraped-membership-page .widget-membership-sso-login,
+body.x .scraped-root.scraped-membership-page .widget-membership-create-account{display:block!important;visibility:visible!important;opacity:1!important}
+
+body.x .scraped-root.scraped-membership-page form[data-aid="MEMBERSHIP_SSO_FORM_REND"],
+body.x .scraped-root.scraped-membership-page form[data-aid="CREATE_ACCOUNT_FORM_REND"]{display:block!important}
+
+body.x .scraped-root.scraped-membership-page form[data-aid="MEMBERSHIP_SSO_FORM_REND"] .x-el-input:not([type="hidden"]),
+body.x .scraped-root.scraped-membership-page form[data-aid="CREATE_ACCOUNT_FORM_REND"] .x-el-input:not([type="hidden"]){display:inline-block!important;visibility:visible!important;opacity:1!important;min-height:44px;width:100%;max-width:100%;box-sizing:border-box}
+
+body.x .scraped-root.scraped-membership-page form[data-aid="MEMBERSHIP_SSO_FORM_REND"] button[type="submit"],
+body.x .scraped-root.scraped-membership-page form[data-aid="CREATE_ACCOUNT_FORM_REND"] button[type="submit"]{display:inline-block!important;visibility:visible!important;opacity:1!important}
+
+body.x .scraped-root.scraped-membership-page form[data-aid="MEMBERSHIP_SSO_FORM_REND"] [data-aid="MEMBERSHIP_SSO_REQ_RESET"]{display:inline-block!important;visibility:visible!important;opacity:1!important}
 
 .scraped-root a{color:var(--site-link)}
 
@@ -458,6 +673,24 @@ html[data-theme=dark] .auth-page__panel--brand{background:linear-gradient(160deg
 .auth-page__footer a{color:var(--site-link)}
 
 .auth-notice{background:var(--site-surface-alt);border-bottom:1px solid var(--site-border);color:var(--site-fg)}
+
+html[data-theme=dark] .membership-page{background:radial-gradient(circle at top,#120f0e 0,#1a1412 55%,#120f0e 100%)}
+
+.membership-page__container{background:var(--site-surface);border-color:var(--site-border);box-shadow:0 18px 48px var(--site-shadow)}
+
+.membership-page__eyebrow{color:var(--site-muted)}
+
+.membership-page__title{color:var(--site-fg)}
+
+.membership-page__intro{color:var(--site-muted)}
+
+.membership-page__meta{color:var(--site-muted)}
+
+.membership-page__meta a{color:var(--site-link)}
+
+.membership-page__empty{color:var(--site-muted)}
+
+.membership-form__success{background:var(--site-surface-alt);border-color:var(--site-border);color:var(--site-fg)}
 
 html[data-theme=dark] .scraped-shop-page #ols-shop-container,html[data-theme=dark] .scraped-root #ols-shop-container{background:var(--site-bg)}
 

@@ -1,4 +1,4 @@
-/** GoDaddy leaves CONTACT_MAP_REND empty; their JS injects the map. */
+/** CONTACT_MAP_REND is empty in static HTML; remote JS injects the map. */
 const MAP_QUERY = "Fairfax, VA, USA";
 const MAP_EMBED_SRC = `https://www.google.com/maps?q=${encodeURIComponent(MAP_QUERY)}&output=embed&z=12`;
 

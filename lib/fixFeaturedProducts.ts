@@ -9,24 +9,24 @@ type Card = { title: string; price: string; src: string };
 
 const CARDS: Card[] = [
   {
-    title: "Strawberries",
-    price: "$3 / $17.50 / $35",
+    title: "A Dozen Chocolate Covered Strawberries",
+    price: "$35",
     src: "/site-media/83a31b2892fe9273.jpg",
   },
   {
     title: "Chocolate Crunch Cake Pop",
-    price: "$3 / $16.50 / $33",
-    src: "/site-media/d53c813db8fb2eeb.jpg",
+    price: "$3",
+    src: "/site-media/555fbb29ae696c03.jpg",
   },
   {
     title: "Chocolate Covered Oreos",
-    price: "From $3",
-    src: "/site-media/0a652586ca168292.jpg",
+    price: "$30",
+    src: "/site-media/790fbdc4458c897b.jpg",
   },
   {
-    title: "Strawberry Shortcake",
-    price: "See menu",
-    src: "/site-media/6a5496871fefec40.jpg",
+    title: "Strawberry Shortcake Pops",
+    price: "$3",
+    src: "/site-media/d88d572addf990ae.jpg",
   },
 ];
 

@@ -1,7 +1,7 @@
 import { SHOP_PRODUCTS } from "./shopProducts";
 import { getProductPathByText } from "./productCatalog";
 
-/** Empty OLS mount: breadcrumb + blank block (products load only via GoDaddy JS). */
+/** Empty OLS mount: breadcrumb + blank block (product grid is hydrated locally). */
 const EMPTY_OLS =
   /(<div data-ux="Block" id="continue-shopping-breadcrumb"[^>]*><\/div>)<div data-ux="Block" class="x-el x-el-div c1-1 c1-2 c1-s c1-8a[^"]*"[^>]*><\/div>/;
 

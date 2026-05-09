@@ -1,6 +1,6 @@
 /**
- * GoDaddy WSB serves product images with src=1×1 gif; real URLs are in
- * data-srclazy / data-srcsetlazy and swapped in by their JS (not loaded here).
+ * Exported storefront HTML uses 1×1 GIF placeholders; real URLs live in
+ * data-srclazy / data-srcsetlazy (swapped by remote JS we do not load).
  */
 function httpsifySrcset(srcset: string): string {
   return srcset
@@ -21,7 +21,7 @@ function httpsifySrcset(srcset: string): string {
     .join(", ");
 }
 
-export function fixGoDaddyLazyImages(html: string): string {
+export function fixLazyPlaceholderImages(html: string): string {
   return html.replace(/<img\b([^>]*)>/gi, (full, attrs: string) => {
     if (!/data-srclazy=/i.test(attrs)) return full;
 
@@ -52,8 +52,7 @@ export function fixGoDaddyLazyImages(html: string): string {
         a += ` srcSet="${ss}"`;
       }
     } else {
-      // GoDaddy leaves srcSet pointing at a transparent placeholder while the real
-      // file is only in data-srclazy; browsers prefer srcset over src, so strip it.
+      // Placeholder srcset would override real src; drop it.
       a = a.replace(/\s+srcSet="[^"]*"/gi, "");
       a = a.replace(/\s+srcset="[^"]*"/gi, "");
     }

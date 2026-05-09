@@ -2,14 +2,20 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import {
+  mapFirebaseAuthError,
+  signInEmailPassword,
+  signInWithGooglePopup,
+} from "@/lib/firebase/auth";
 
-function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : String(error);
-}
+type LoginFormProps = {
+  /** Matches membership SSO panel (placeholder inputs, square SIGN IN). */
+  variant?: "default" | "membership";
+};
 
-export function LoginForm() {
+export function LoginForm({ variant = "default" }: LoginFormProps) {
   const router = useRouter();
+  const membership = variant === "membership";
   const [message, setMessage] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [googlePending, setGooglePending] = useState(false);
@@ -38,22 +44,12 @@ export function LoginForm() {
     }
 
     setPending(true);
-    const supabase = createBrowserSupabaseClient();
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        setMessage(error.message);
-        return;
-      }
-
+      await signInEmailPassword(email, password);
       router.replace("/");
       router.refresh();
     } catch (err) {
-      setMessage(getErrorMessage(err));
+      setMessage(mapFirebaseAuthError(err));
     } finally {
       setPending(false);
     }
@@ -63,49 +59,54 @@ export function LoginForm() {
     setMessage(null);
     setGooglePending(true);
 
-    const supabase = createBrowserSupabaseClient();
-    const redirectTo = `${window.location.origin}/auth/callback?next=/`;
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo,
-        },
-      });
-
-      if (error) {
-        setMessage(error.message);
-      }
+      await signInWithGooglePopup();
+      router.replace("/");
+      router.refresh();
     } catch (err) {
-      setMessage(getErrorMessage(err));
+      setMessage(mapFirebaseAuthError(err));
     } finally {
       setGooglePending(false);
     }
   }
 
   return (
-    <form className="auth-form" onSubmit={handleEmailPasswordSubmit} noValidate>
+    <form
+      className={membership ? "auth-form membership-form" : "auth-form"}
+      onSubmit={handleEmailPasswordSubmit}
+      noValidate
+    >
       <div className="auth-form__stack">
         <label className="auth-form__field">
-          <span className="auth-form__label">Email</span>
+          <span className={membership ? "auth-form__label sr-only" : "auth-form__label"}>
+            Email
+          </span>
           <input
-            className="auth-form__input"
+            className={
+              membership ? "auth-form__input membership-form__input" : "auth-form__input"
+            }
             type="email"
             name="email"
             autoComplete="email"
-            placeholder="you@example.com"
+            placeholder={membership ? "Email" : "you@example.com"}
+            aria-label="Email"
             required
           />
         </label>
 
         <label className="auth-form__field">
-          <span className="auth-form__label">Password</span>
+          <span className={membership ? "auth-form__label sr-only" : "auth-form__label"}>
+            Password
+          </span>
           <input
-            className="auth-form__input"
+            className={
+              membership ? "auth-form__input membership-form__input" : "auth-form__input"
+            }
             type="password"
             name="password"
             autoComplete="current-password"
-            placeholder="Enter your password"
+            placeholder={membership ? "Password" : "Enter your password"}
+            aria-label="Password"
             required
           />
         </label>
@@ -117,18 +118,24 @@ export function LoginForm() {
         </p>
       ) : null}
 
-      <div className="auth-form__actions">
-        <button className="auth-form__button" type="submit" disabled={pending || googlePending}>
-          {pending ? "Signing in..." : "Sign in"}
-        </button>
+      <div className={membership ? "membership-form__actions" : "auth-form__actions"}>
         <button
-          className="auth-form__button auth-form__button--secondary"
-          type="button"
-          onClick={handleGoogleSignIn}
+          className={membership ? "membership-form__submit" : "auth-form__button"}
+          type="submit"
           disabled={pending || googlePending}
         >
-          {googlePending ? "Connecting..." : "Continue with Google"}
+          {pending ? "Signing in..." : membership ? "SIGN IN" : "Sign in"}
         </button>
+        {membership ? null : (
+          <button
+            className="auth-form__button auth-form__button--secondary"
+            type="button"
+            onClick={handleGoogleSignIn}
+            disabled={pending || googlePending}
+          >
+            {googlePending ? "Connecting..." : "Continue with Google"}
+          </button>
+        )}
       </div>
     </form>
   );

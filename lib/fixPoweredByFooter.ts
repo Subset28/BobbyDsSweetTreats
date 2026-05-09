@@ -1,4 +1,4 @@
-/** Replace GoDaddy “Powered by” badge with Code4Community attribution. */
+/** Replace default “Powered by” badge with Code4Community attribution. */
 const POWERED_BLOCK =
   /<p([^>]*data-aid="FOOTER_POWERED_BY_AIRO_RENDERED"[^>]*)><span>Powered by <\/span><\/p><a[^>]*data-aid="FOOTER_POWERED_BY_AIRO_RENDERED_LINK"[^>]*>[\s\S]*?<\/a>/g;
 

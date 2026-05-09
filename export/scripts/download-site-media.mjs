@@ -1,8 +1,8 @@
 /**
- * Download every img1.wsimg.com asset referenced in scraped HTML, godaddy-all.css,
+ * Download every img1.wsimg.com asset referenced in scraped HTML, storefront CSS,
  * and app/layout.tsx; save under public/site-media/ and rewrite sources to /site-media/...
  *
- * Run: node scripts/download-site-media.mjs
+ * Run from repo root: node export/scripts/download-site-media.mjs
  */
 import crypto from "crypto";
 import fs from "fs";
@@ -10,15 +10,16 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(__dirname, "..");
-const outDir = path.join(root, "public", "site-media");
+const repoRoot = path.join(__dirname, "..", "..");
+const outDir = path.join(repoRoot, "public", "site-media");
 const filesToScan = [
-  path.join(root, "scraped", "home-body-inner.html"),
-  path.join(root, "scraped", "shop-body-inner.html"),
-  path.join(root, "scraped", "privacy-body-inner.html"),
-  path.join(root, "scraped", "terms-body-inner.html"),
-  path.join(root, "app", "godaddy-all.css"),
-  path.join(root, "app", "layout.tsx"),
+  path.join(repoRoot, "content", "home-body-inner.html"),
+  path.join(repoRoot, "content", "shop-body-inner.html"),
+  path.join(repoRoot, "content", "privacy-body-inner.html"),
+  path.join(repoRoot, "content", "terms-body-inner.html"),
+  path.join(repoRoot, "content", "cart-body-inner.html"),
+  path.join(repoRoot, "app", "storefront.css"),
+  path.join(repoRoot, "app", "layout.tsx"),
 ];
 
 function normalizeUrl(raw) {
@@ -125,6 +126,7 @@ function replaceVariants(canonical) {
 async function main() {
   fs.mkdirSync(outDir, { recursive: true });
   for (const f of fs.readdirSync(outDir)) {
+    if (f === "manifest.json") continue;
     fs.unlinkSync(path.join(outDir, f));
   }
 
@@ -145,8 +147,7 @@ async function main() {
     try {
       const res = await fetch(url, {
         headers: {
-          "User-Agent":
-            "Mozilla/5.0 (compatible; BobbieSiteExport/1.0; +https://bobbiedsweettreats.com)",
+          "User-Agent": "Mozilla/5.0 (compatible; SiteAssetExport/1.0)",
           Accept: "*/*",
         },
       });
@@ -220,7 +221,7 @@ async function main() {
     const after = rewriteContent(before);
     if (after !== before) {
       fs.writeFileSync(fp, after, "utf8");
-      console.log("Rewrote", path.relative(root, fp));
+      console.log("Rewrote", path.relative(repoRoot, fp));
     }
   }
 

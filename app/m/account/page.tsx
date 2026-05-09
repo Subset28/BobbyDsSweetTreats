@@ -4,11 +4,11 @@ import { loadScrapedBody } from "@/lib/loadScrapedBody";
 
 export const metadata: Metadata = {
   title: "Login | BobbieD's Sweet Treats",
-  description: "Sign in to manage your BobbieD's Sweet Treats account.",
+  description:
+    "Sign in to your account to access your profile, history, and any private pages.",
 };
 
-/** Alias for scraped `/m/login` markup (bookmark-friendly). */
-export default function LoginPage() {
+export default function MembershipAccountPage() {
   const html = loadScrapedBody("m-login-body-inner.html");
   return (
     <ScrapedHtml

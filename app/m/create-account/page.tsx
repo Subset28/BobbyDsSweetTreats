@@ -3,12 +3,11 @@ import { ScrapedHtml } from "@/components/ScrapedHtml";
 import { loadScrapedBody } from "@/lib/loadScrapedBody";
 
 export const metadata: Metadata = {
-  title: "Sign Up | BobbieD's Sweet Treats",
-  description: "Create a BobbieD's Sweet Treats account.",
+  title: "Create account | BobbieD's Sweet Treats",
+  description: "Create your BobbieD's Sweet Treats account.",
 };
 
-/** Alias for scraped `/m/create-account` markup. */
-export default function SignupPage() {
+export default function MembershipCreateAccountPage() {
   const html = loadScrapedBody("m-create-account-body-inner.html");
   return (
     <ScrapedHtml

@@ -1,4 +1,4 @@
-/** GoDaddy menu widget ships a default footnote paragraph; remove it from output. */
+/** Menu widget ships a default footnote paragraph; remove it from output. */
 const MENU_FOOTNOTE_P =
   /<p data-ux="DetailsMinor" data-aid="MENU_SECTION_FOOTNOTE_RENDERED"[^>]*>[\s\S]*?<\/p>/g;
 

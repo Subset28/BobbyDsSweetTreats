@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  /** Ensures `firebase/auth`, `firebase/app`, etc. subpath exports resolve in Next’s bundlers. */
+  transpilePackages: ["firebase"],
 };
 
 export default nextConfig;

@@ -1,15 +1,23 @@
 /**
- * Rebuild app/godaddy-all.css from the live homepage <head> only.
- * Do not merge other routes: GoDaddy reuses c1-* tokens with different meanings per page.
+ * Optional: rebuild `<head>` inline styles from a source homepage into export/cache/.
+ * Set SOURCE_SITE_URL (e.g. https://example.com/). Remote `c1-*` tokens differ per route — only merge one page.
  */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(__dirname, "..");
-const outFile = path.join(root, "app", "godaddy-all.css");
-const url = "https://bobbiedsweettreats.com/";
+const exportRoot = path.join(__dirname, "..");
+const cacheDir = path.join(exportRoot, "cache");
+const outFile = path.join(cacheDir, "rebuilt-head-styles.css");
+
+const url = process.env.SOURCE_SITE_URL?.trim();
+if (!url) {
+  console.error("Set SOURCE_SITE_URL to rebuild (e.g. SOURCE_SITE_URL=https://example.com node export/scripts/rebuild-head-styles.mjs)");
+  process.exit(1);
+}
+
+fs.mkdirSync(cacheDir, { recursive: true });
 
 const res = await fetch(url);
 if (!res.ok) throw new Error(`Fetch failed ${res.status}`);
