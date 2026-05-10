@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ScrapedHtml } from "@/components/ScrapedHtml";
+import { RequireAuth } from "@/components/RequireAuth";
 import { loadScrapedBody } from "@/lib/loadScrapedBody";
 
 export const metadata: Metadata = {
@@ -8,12 +9,14 @@ export const metadata: Metadata = {
 };
 
 export default function MembershipOrdersPage() {
-  /** Live `/m/orders` 302s to `/m/login` when logged out; scrape matches that gate. */
   const html = loadScrapedBody("m-orders-body-inner.html");
   return (
-    <ScrapedHtml
-      html={html}
-      className="scraped-membership-page scraped-membership-orders"
-    />
+    <>
+      <RequireAuth />
+      <ScrapedHtml
+        html={html}
+        className="scraped-membership-page scraped-membership-orders"
+      />
+    </>
   );
 }

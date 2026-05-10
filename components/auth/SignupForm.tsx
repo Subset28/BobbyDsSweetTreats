@@ -31,18 +31,22 @@ export function SignupForm({ variant = "default" }: SignupFormProps) {
     setMessage(null);
 
     const formData = new FormData(event.currentTarget);
-    const name = String(formData.get("name") ?? "").trim();
+    const firstName = String(formData.get("firstName") ?? "").trim();
+    const lastName = String(formData.get("lastName") ?? "").trim();
     const email = String(formData.get("email") ?? "").trim();
+    const phone = String(formData.get("phone") ?? "").trim();
     const password = String(formData.get("password") ?? "");
     const confirmPassword = String(formData.get("confirmPassword") ?? "");
 
-    if (!name) {
-      setMessage("Name is required.");
+    const name = `${firstName} ${lastName}`.trim();
+
+    if (!firstName || !lastName) {
+      setMessage("First name and last name are required.");
       return;
     }
 
-    if (name.length < 2) {
-      setMessage("Name must be at least 2 characters.");
+    if (firstName.length < 2 || lastName.length < 2) {
+      setMessage("First and last name must be at least 2 characters each.");
       return;
     }
 
@@ -112,25 +116,43 @@ export function SignupForm({ variant = "default" }: SignupFormProps) {
       noValidate
     >
       <div className="auth-form__stack">
-        <label className="auth-form__field">
-          <span className={membership ? "auth-form__label sr-only" : "auth-form__label"}>
-            Name
-          </span>
-          <input
-            className={
-              membership ? "auth-form__input membership-form__input" : "auth-form__input"
-            }
-            type="text"
-            name="name"
-            autoComplete="name"
-            placeholder={membership ? "Name" : "Your name"}
-            aria-label="Name"
-            required
-          />
-        </label>
+        <div className="auth-form__row">
+          <label className="auth-form__field">
+            <span className={membership ? "auth-form__label" : "auth-form__label"}>
+              First name
+            </span>
+            <input
+              className={
+                membership ? "auth-form__input membership-form__input" : "auth-form__input"
+              }
+              type="text"
+              name="firstName"
+              autoComplete="given-name"
+              placeholder={membership ? "First name" : "First name"}
+              aria-label="First name"
+              required
+            />
+          </label>
+          <label className="auth-form__field">
+            <span className={membership ? "auth-form__label" : "auth-form__label"}>
+              Last name
+            </span>
+            <input
+              className={
+                membership ? "auth-form__input membership-form__input" : "auth-form__input"
+              }
+              type="text"
+              name="lastName"
+              autoComplete="family-name"
+              placeholder={membership ? "Last name" : "Last name"}
+              aria-label="Last name"
+              required
+            />
+          </label>
+        </div>
 
         <label className="auth-form__field">
-          <span className={membership ? "auth-form__label sr-only" : "auth-form__label"}>
+          <span className={membership ? "auth-form__label" : "auth-form__label"}>
             Email
           </span>
           <input
@@ -143,6 +165,22 @@ export function SignupForm({ variant = "default" }: SignupFormProps) {
             placeholder={membership ? "Email" : "you@example.com"}
             aria-label="Email"
             required
+          />
+        </label>
+
+        <label className="auth-form__field">
+          <span className={membership ? "auth-form__label" : "auth-form__label"}>
+            Phone (optional)
+          </span>
+          <input
+            className={
+              membership ? "auth-form__input membership-form__input" : "auth-form__input"
+            }
+            type="tel"
+            name="phone"
+            autoComplete="tel"
+            placeholder={membership ? "Phone (optional)" : "Phone (optional)"}
+            aria-label="Phone (optional)"
           />
         </label>
 
@@ -206,6 +244,42 @@ export function SignupForm({ variant = "default" }: SignupFormProps) {
           </button>
         )}
       </div>
+
+      {membership ? (
+        <div className="membership-form__signin-link">
+          Already have an account?{" "}
+          <a href="/m/login" className="membership-form__link">
+            Sign in
+          </a>
+        </div>
+      ) : null}
+
+      {membership ? (
+        <div className="membership-form__recaptcha">
+          This site is protected by reCAPTCHA and{" "}
+          <a href="https://policies.google.com/privacy" className="membership-form__link">
+            Google Privacy Policy
+          </a>{" "}
+          and{" "}
+          <a href="https://policies.google.com/terms" className="membership-form__link">
+            Terms of Service
+          </a>{" "}
+          apply.
+        </div>
+      ) : null}
+
+      {membership ? (
+        <div className="membership-form__copyright">
+          COPYRIGHT 2026 BOBBIED'S SWEET TREATS - ALL RIGHTS RESERVED.{" "}
+          <a href="/privacy-policy" className="membership-form__link">
+            Privacy Policy
+          </a>{" "}
+          and{" "}
+          <a href="/terms-and-conditions" className="membership-form__link">
+            Terms and Conditions
+          </a>
+        </div>
+      ) : null}
     </form>
   );
 }

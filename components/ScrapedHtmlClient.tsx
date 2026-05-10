@@ -201,7 +201,6 @@ export function ScrapedHtmlClient({
   const membershipChrome = (className ?? "").includes("scraped-membership-page");
 
   useEffect(() => {
-    if (!membershipChrome) return;
     let cancelled = false;
     let unsub: (() => void) | undefined;
 
@@ -209,6 +208,17 @@ export function ScrapedHtmlClient({
       const el = document.getElementById(SCRAPED_ROOT_ID);
       if (!el) return;
       el.dataset.bstAuth = loggedIn ? "1" : "0";
+
+      // Rename "Create Account" link in logged-out dropdown to "Sign up"
+      el.querySelectorAll<HTMLAnchorElement>('ul.membership-sign-out a[id*="membership-create"]').forEach((a) => {
+        if (a.textContent?.trim() === "Create Account") a.textContent = "Sign up";
+      });
+
+      // Show display name or email in logged-in dropdown header
+      const emailElement = el.querySelector('[data-aid="MEMBERSHIP_EMAIL_ADDRESS"]');
+      if (emailElement) {
+        emailElement.textContent = "";
+      }
     }
 
     void import("@/lib/firebase/auth")
@@ -217,6 +227,12 @@ export function ScrapedHtmlClient({
         unsub = subscribeAuth((user) => {
           if (cancelled) return;
           apply(!!user);
+
+          const el = document.getElementById(SCRAPED_ROOT_ID);
+          const emailElement = el?.querySelector('[data-aid="MEMBERSHIP_EMAIL_ADDRESS"]');
+          if (emailElement) {
+            emailElement.textContent = user?.displayName || user?.email || "";
+          }
         });
       })
       .catch(() => {

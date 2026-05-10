@@ -78,19 +78,19 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 
 .auth-notice{position:sticky;top:0;z-index:40;margin:0;padding:12px 18px;background:#fff3e9;border-bottom:1px solid #f1c8ab;color:#8b4528;font-family:Cantarell,Arial,sans-serif;line-height:1.5;text-align:center}
 
-.membership-page{min-height:100vh;display:grid;place-items:center;padding:48px 20px;background:radial-gradient(circle at top,#fff 0,#fff8f2 45%,#fff4ea 100%);position:relative;overflow:hidden}
+.membership-page{min-height:100vh;display:grid;place-items:center;padding:48px 20px;background:#fff;position:relative;overflow:hidden}
 
-.membership-page__backdrop{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 12%,#ffd9c040 0,transparent 42%),radial-gradient(circle at 88% 78%,#f4b08d35 0,transparent 48%)}
+.membership-page__backdrop{display:none}
 
-.membership-page__section{position:relative;z-index:1;width:min(984px,100%)}
+.membership-page__section{position:relative;z-index:1;width:min(600px,100%)}
 
-.membership-page__container{margin:0 auto;width:min(608px,100%);padding:40px 36px;background:#fff;border:1px solid #e7d7cc;border-radius:2px;box-shadow:0 18px 48px #b86a3520}
+.membership-page__container{margin:0 auto;width:100%;padding:40px 36px;background:#fff;border:none;border-radius:0;box-shadow:none}
 
-.membership-page__eyebrow{margin:0 0 12px;font-family:Poppins,Arial,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;color:#6b4e40}
+.membership-page__eyebrow{display:none}
 
-.membership-page__title{margin:0;font-family:Poppins,Arial,sans-serif;font-size:1.75rem;font-weight:700;letter-spacing:.06em;color:#24150f}
+.membership-page__title{margin:0 0 24px;font-family:Poppins,Arial,sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:.06em;color:#24150f;text-align:left}
 
-.membership-page__intro{margin:16px 0 0;font-family:Cantarell,Arial,sans-serif;font-size:1rem;line-height:1.5;color:#4a3429}
+.membership-page__intro{margin:0 0 32px;font-family:Cantarell,Arial,sans-serif;font-size:0.95rem;line-height:1.5;color:#24150f;text-align:center}
 
 .membership-page__body{margin-top:28px}
 
@@ -108,17 +108,33 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 
 .membership-form{display:grid;gap:18px}
 
-.membership-form__input{border-radius:2px!important;padding:16px 14px!important}
+.auth-form__row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 
-.membership-form__actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.membership-form__input{border-radius:2px!important;padding:14px 16px!important;border:1px solid #e0e0e0;background:#fff;font-family:Poppins,Arial,sans-serif;font-size:0.95rem;transition:border-color .15s ease}
 
-.membership-form__submit{appearance:none;border:0;border-radius:2px;background:linear-gradient(135deg,#8e4728,#d56f40);color:#fff;cursor:pointer;min-height:56px;min-width:136px;padding:0 28px;font-family:Poppins,Arial,sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 10px 22px #b96b3830;transition:opacity .15s ease,transform .15s ease}
+.membership-form__actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:8px}
+
+.membership-form__submit{appearance:none;border:0;border-radius:2px;background:#ff8c42;color:#fff;cursor:pointer;min-height:48px;min-width:200px;padding:0 28px;font-family:Poppins,Arial,sans-serif;font-size:.95rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;box-shadow:none;transition:opacity .15s ease,transform .15s ease}
 
 .membership-form__submit:hover:not(:disabled){transform:translateY(-1px)}
 
 .membership-form__submit:disabled{cursor:not-allowed;opacity:.72}
 
 .membership-form__submit:focus:not(:disabled),.membership-form__submit:focus-visible:not(:disabled){outline:none;box-shadow:0 10px 22px #b96b3830,0 0 0 4px #d56f4033}
+
+.membership-form__signin-link{margin:24px 0 0;text-align:center;font-family:Cantarell,Arial,sans-serif;font-size:0.95rem;line-height:1.5;color:#24150f}
+
+.membership-form__link{color:#ff8c42;font-weight:700;text-decoration:none !important;text-decoration-line:none !important}
+
+.membership-form__link:hover{text-decoration:underline}
+
+.membership-form__recaptcha{margin-top:32px;text-align:center;font-family:Cantarell,Arial,sans-serif;font-size:0.85rem;line-height:1.5;color:#6b7280}
+
+.membership-form__recaptcha .membership-form__link{color:#ff8c42}
+
+.membership-form__copyright{margin-top:40px;text-align:center;font-family:Cantarell,Arial,sans-serif;font-size:0.85rem;line-height:1.5;color:#6b7280}
+
+.membership-form__copyright .membership-form__link{color:#ff8c42}
 
 .membership-form__success{margin:0;padding:16px;border-radius:8px;background:#f6fff8;border:1px solid #c8e6d4;color:#2d5a3d;font-family:Cantarell,Arial,sans-serif;line-height:1.55;text-align:center}
 
@@ -553,16 +569,17 @@ body{background:var(--site-bg);color:var(--site-fg);transition:background-color 
 body.x .scraped-root span[id*="membership-icon"]{position:relative;z-index:55}
 
 body.x .scraped-root span[id*="membership-icon"] ul[role="menu"]{
-	display:none!important;
-	position:absolute!important;
-	right:0;top:calc(100% + 4px);
-	min-width:220px;margin:0;padding:8px 0;
-	list-style:none;
-	background:var(--site-surface);
-	border:1px solid var(--site-border);
-	border-radius:4px;
-	box-shadow:0 16px 40px var(--site-shadow);
-	z-index:80;
+    display:none!important;
+    position:absolute!important;
+    right:0;top:calc(100% + 4px);
+    z-index:80;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+    width:220px;        
+    overflow:visible;     
 }
 
 body.x .scraped-root span[id*="membership-icon"] ul[role="menu"] a{display:block;padding:10px 16px;font-family:Poppins,Arial,sans-serif;font-size:14px;color:var(--site-link)!important;text-decoration:none}
@@ -695,3 +712,234 @@ html[data-theme=dark] .membership-page{background:radial-gradient(circle at top,
 html[data-theme=dark] .scraped-shop-page #ols-shop-container,html[data-theme=dark] .scraped-root #ols-shop-container{background:var(--site-bg)}
 
 html[data-theme=dark] .scraped-root .widget-footer,html[data-theme=dark] .scraped-root .widget-shop,html[data-theme=dark] .scraped-root .widget-header,html[data-theme=dark] .scraped-root [data-ux=Widget],html[data-theme=dark] .scraped-root [data-ux=Section],html[data-theme=dark] .scraped-root [data-ux=Block]{background-color:transparent}
+
+/* ── Global auth-state dropdown visibility (all pages) ──────────────── */
+
+/* Override the hover/focus-within show rule with higher specificity.
+   Logged-OUT menu: hide when signed in. */
+body.x .scraped-root[data-bst-auth="1"] span[id*="membership-icon"]:hover ul.membership-sign-out,
+body.x .scraped-root[data-bst-auth="1"] span[id*="membership-icon"]:focus-within ul.membership-sign-out{display:none!important}
+
+/* Logged-IN menu: hide when NOT signed in (including before auth resolves). */
+body.x .scraped-root:not([data-bst-auth="1"]) span[id*="membership-icon"]:hover ul.membership-sign-in,
+body.x .scraped-root:not([data-bst-auth="1"]) span[id*="membership-icon"]:focus-within ul.membership-sign-in{display:none!important}
+
+/* Also hide ul.membership-links-logged-in when not signed in */
+body.x .scraped-root:not([data-bst-auth="1"]) span[id*="membership-icon"]:hover ul.membership-links-logged-in,
+body.x .scraped-root:not([data-bst-auth="1"]) span[id*="membership-icon"]:focus-within ul.membership-links-logged-in{display:none!important}
+
+/* Logged-out dropdown: reorder items → Orders, My Account, Sign up, Sign in */
+body.x .scraped-root ul.membership-sign-out{display:flex!important;flex-direction:column!important;justify-content:center!important;list-style:none!important;padding:12px 0!important;margin:0!important}
+body.x .scraped-root ul.membership-sign-out li:has(hr){display:none!important}
+body.x .scraped-root ul.membership-sign-out li:has(a[id*="membership-orders"]){order:1!important}
+body.x .scraped-root ul.membership-sign-out li:has(a[id*="membership-account-logged-out"]){order:2!important}
+body.x .scraped-root ul.membership-sign-out li:has(a[id*="membership-create"]){order:3!important}
+body.x .scraped-root ul.membership-sign-out li:has(a[id*="membership-sign-in"]){order:4!important}
+
+/* ── Sign-in & Create-account page redesign ──────────────────────────── */
+
+/* Remove any decorative background; use plain white */
+body.x .scraped-root.scraped-membership-login .widget-membership-sso-login > [data-ux=Section],
+body.x .scraped-root.scraped-membership-signup .widget-membership-create-account > [data-ux=Section]{
+  background:#fff!important;
+  padding:60px 20px 40px!important;
+  min-height:100vh!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+}
+
+/* Centre the inner container and cap its width */
+body.x .scraped-root.scraped-membership-login .widget-membership-sso-login [data-ux=Container],
+body.x .scraped-root.scraped-membership-signup .widget-membership-create-account [data-ux=Container]{
+  width:min(680px,100%)!important;
+  max-width:680px!important;
+  margin:0 auto!important;
+  padding:0!important;
+}
+
+/* Page title – "Account sign in" / "Create account" */
+body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_SSO_TITLE_REND],
+body.x .scraped-root.scraped-membership-signup [data-aid=CREATE_ACCOUNT_HEADING_REND]{
+  font-family:Poppins,Arial,sans-serif!important;
+  font-size:.8rem!important;
+  font-weight:600!important;
+  letter-spacing:.18em!important;
+  text-transform:uppercase!important;
+  color:#b2603b!important;
+  text-align:left!important;
+  margin:0 0 36px!important;
+  display:block!important;
+}
+
+/* Grid / GridCell: stack vertically, full width */
+body.x .scraped-root.scraped-membership-login .widget-membership-sso-login [data-ux=Grid],
+body.x .scraped-root.scraped-membership-login .widget-membership-sso-login [data-ux=GridCell],
+body.x .scraped-root.scraped-membership-signup .widget-membership-create-account [data-ux=Grid],
+body.x .scraped-root.scraped-membership-signup .widget-membership-create-account [data-ux=GridCell]{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  flex-basis:auto!important;
+  padding:0!important;
+  margin:0!important;
+  border:none!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  border-radius:0!important;
+}
+
+/* Intro / description text */
+body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_SSO_MESSAGE_REND],
+body.x .scraped-root.scraped-membership-signup [data-aid=CREATE_ACCOUNT_DESCRIPTION_REND]{
+  font-family:Cantarell,Arial,sans-serif!important;
+  font-size:1rem!important;
+  color:#3d3d3d!important;
+  text-align:center!important;
+  margin:0 0 40px!important;
+  line-height:1.6!important;
+}
+
+/* Form layout */
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND],
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND]{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+  width:100%!important;
+}
+
+/* Input wrapper divs */
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] > div,
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] > div{
+  margin-bottom:28px!important;
+}
+
+/* All text/password inputs – underline only */
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] .x-el-input:not([type=hidden]),
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] .x-el-input:not([type=hidden]){
+  appearance:none!important;
+  background:transparent!important;
+  border:none!important;
+  border-bottom:1px solid #c0c0c0!important;
+  border-radius:0!important;
+  padding:10px 0!important;
+  font-family:Cantarell,Arial,sans-serif!important;
+  font-size:1rem!important;
+  color:#24150f!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  outline:none!important;
+  box-shadow:none!important;
+  display:block!important;
+}
+
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] .x-el-input:not([type=hidden])::placeholder,
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] .x-el-input:not([type=hidden])::placeholder{
+  color:#888!important;
+}
+
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] .x-el-input:not([type=hidden]):focus,
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] .x-el-input:not([type=hidden]):focus{
+  border-bottom-color:#b2603b!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+
+/* Submit button – centered orange rectangle */
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] button[data-ux=ButtonPrimary],
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] button[data-ux=ButtonPrimary]{
+  appearance:none!important;
+  border:none!important;
+  background:#e8784a!important;
+  color:#1a1a1a!important;
+  font-family:Poppins,Arial,sans-serif!important;
+  font-size:.85rem!important;
+  font-weight:700!important;
+  letter-spacing:.1em!important;
+  text-transform:uppercase!important;
+  text-decoration:none!important;
+  line-height:normal!important;
+  border-radius:4px!important;
+  padding:14px 48px!important;
+  min-height:50px!important;
+  cursor:pointer!important;
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:static!important;
+  transform:none!important;
+  margin:8px auto 0!important;
+  box-shadow:none!important;
+  transition:opacity .15s ease!important;
+}
+
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] button[data-ux=ButtonPrimary]:hover,
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] button[data-ux=ButtonPrimary]:hover{
+  opacity:.9!important;
+  transform:none!important;
+  box-shadow:none!important;
+}
+
+/* "Reset password" link */
+body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_SSO_REQ_RESET]{
+  display:block!important;
+  text-align:center!important;
+  color:#b2603b!important;
+  font-family:Cantarell,Arial,sans-serif!important;
+  font-size:.95rem!important;
+  text-decoration:none!important;
+  margin-top:20px!important;
+}
+
+body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_SSO_REQ_RESET]:hover{
+  text-decoration:underline!important;
+}
+
+/* "Not a member?" / "Already have an account?" paragraph */
+body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_REQUEST_ACCESS_REND],
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] p[data-ux=Text]{
+  text-align:center!important;
+  font-family:Cantarell,Arial,sans-serif!important;
+  font-size:.95rem!important;
+  color:#3d3d3d!important;
+  margin-top:24px!important;
+}
+
+body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_REQUEST_ACCESS_REND] a,
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] p[data-ux=Text] a{
+  color:#b2603b!important;
+  font-weight:400!important;
+  text-decoration:none!important;
+}
+
+body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_REQUEST_ACCESS_REND] a:hover,
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] p[data-ux=Text] a:hover{
+  text-decoration:underline!important;
+}
+
+/* Hide honeypot beacon field and its wrapper */
+
+/* Prevent strikethrough on membership login page text */
+body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_REQUEST_ACCESS_REND] a,
+body.x .scraped-root.scraped-membership-login [data-aid=CREATE_ACCOUNT_FORM_REND] p a {
+  text-decoration: none !important;
+}
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] > div:has([data-aid=CREATE_ACCOUNT_BEACON]){
+  display:none!important;
+}
+
+/* Ensure all form block wrappers and buttons are visible */
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] [data-ux=Block],
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] [data-ux=Block]{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] button[data-ux=ButtonPrimary],
+body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] button[data-ux=ButtonPrimary]{
+  visibility:visible!important;
+  opacity:1!important;
+}

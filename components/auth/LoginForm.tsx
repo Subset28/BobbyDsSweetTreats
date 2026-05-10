@@ -137,6 +137,28 @@ export function LoginForm({ variant = "default" }: LoginFormProps) {
           </button>
         )}
       </div>
+
+      {membership ? (
+        <div className="membership-form__signin-link">
+          Need an account?{" "}
+          <a href="/m/create-account" className="membership-form__link">
+            Sign up
+          </a>
+        </div>
+      ) : null}
+
+      {membership ? (
+        <div className="membership-form__copyright">
+          COPYRIGHT © 2026 BOBBIED'S SWEET TREATS - ALL RIGHTS RESERVED.{" "}
+          <a href="/privacy-policy" className="membership-form__link">
+            Privacy Policy
+          </a>{" "}
+          and{" "}
+          <a href="/terms-and-conditions" className="membership-form__link">
+            Terms and Conditions
+          </a>
+        </div>
+      ) : null}
     </form>
   );
 }
