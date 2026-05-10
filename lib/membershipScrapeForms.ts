@@ -40,6 +40,26 @@ export function attachMembershipScrapeForms(
         '[data-aid="MEMBERSHIP_SSO_SUBMIT"], button[type="submit"], [data-ux="ButtonPrimary"]',
       );
 
+      // If no submit button found, create one
+      if (!submitBtn) {
+        const newSubmitBtn = document.createElement("button");
+        newSubmitBtn.type = "submit";
+        newSubmitBtn.textContent = "SIGN IN";
+        newSubmitBtn.className = "membership-form__submit";
+        newSubmitBtn.style.cssText = `
+          background-color: #000;
+          color: #fff;
+          padding: 12px 24px;
+          border: none;
+          cursor: pointer;
+          font-weight: bold;
+          margin-top: 16px;
+        `;
+        
+        // Insert the button at the end of the form
+        form.appendChild(newSubmitBtn);
+      }
+
       const onSubmit = async (e: Event) => {
         e.preventDefault();
         if (errorEl) {
@@ -72,7 +92,8 @@ export function attachMembershipScrapeForms(
           return;
         }
 
-        if (submitBtn) submitBtn.disabled = true;
+        const actualSubmitBtn = submitBtn || form.querySelector<HTMLButtonElement>(".membership-form__submit");
+        if (actualSubmitBtn) actualSubmitBtn.disabled = true;
         try {
           const { signInEmailPassword, mapFirebaseAuthError } = await import(
             "@/lib/firebase/auth"
@@ -93,7 +114,8 @@ export function attachMembershipScrapeForms(
             errorEl.style.display = "block";
           }
         } finally {
-          if (submitBtn) submitBtn.disabled = false;
+          const actualSubmitBtn = submitBtn || form.querySelector<HTMLButtonElement>(".membership-form__submit");
+          if (actualSubmitBtn) actualSubmitBtn.disabled = false;
         }
       };
 
