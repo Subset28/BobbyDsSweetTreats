@@ -61,30 +61,30 @@ export function ProductDetailClient({ product }: Props) {
       <div className="bst-product-detail__eyebrow">Fresh from Bobbie D&apos;s Sweet Treats</div>
       <h1 className="bst-product-detail__title">{product.title}</h1>
       <p className="bst-product-detail__price" aria-live="polite">
-        {formatPrice(lineTotal)}
-      </p>
-      <p className="bst-product-detail__unit-price">
-        {formatPrice(unitPrice)} each
+        <span className="bst-product-detail__price-amount">{formatPrice(unitPrice)}</span>
+        <span className="bst-product-detail__price-suffix"> each</span>
       </p>
       <p className="bst-product-detail__description">{product.description}</p>
 
-      <div className="bst-product-detail__field">
-        <div className="bst-product-detail__label">Size</div>
-        <div className="bst-product-detail__variant-list" role="group" aria-label="Size options">
-          {product.variants.map((entry) => (
-            <button
-              key={entry.id}
-              type="button"
-              className={`bst-product-detail__variant${entry.id === variantId ? " is-active" : ""}`}
-              aria-pressed={entry.id === variantId}
-              onClick={() => setVariantId(entry.id)}
-            >
-              <span>{entry.label}</span>
-              <span>{formatPrice(entry.price)}</span>
-            </button>
-          ))}
+      {product.variants.length > 1 ? (
+        <div className="bst-product-detail__field">
+          <div className="bst-product-detail__label">Options</div>
+          <div className="bst-product-detail__variant-list" role="group" aria-label="Product options">
+            {product.variants.map((entry) => (
+              <button
+                key={entry.id}
+                type="button"
+                className={`bst-product-detail__variant${entry.id === variantId ? " is-active" : ""}`}
+                aria-pressed={entry.id === variantId}
+                onClick={() => setVariantId(entry.id)}
+              >
+                <span>{entry.label}</span>
+                <span>{formatPrice(entry.price)}</span>
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       <div className="bst-product-detail__field">
         <div className="bst-product-detail__label">Quantity</div>
@@ -97,6 +97,11 @@ export function ProductDetailClient({ product }: Props) {
             +
           </button>
         </div>
+        {quantity > 1 ? (
+          <p className="bst-product-detail__subtotal" aria-live="polite">
+            Subtotal: {formatPrice(lineTotal)}
+          </p>
+        ) : null}
       </div>
 
       <div className="bst-product-detail__actions">

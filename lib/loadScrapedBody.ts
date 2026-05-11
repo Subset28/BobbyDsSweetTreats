@@ -15,17 +15,18 @@ import { fixPoweredByFooter } from "./fixPoweredByFooter";
 import { fixRemoveMenuFootnotePlaceholder } from "./fixRemoveMenuFootnotePlaceholder";
 import { fixShopStorefront } from "./fixShopStorefront";
 import { mergeCanonicalChrome } from "./mergeCanonicalChrome";
+import { relaxScrapedPageShellStretch } from "./relaxScrapedPageShellStretch";
 import { rewriteMirrorAbsoluteUrls } from "./rewriteMirrorAbsoluteUrls";
 import { stripShopHeaderPromo } from "./stripShopHeaderPromo";
 
 const HOME_BODY = "home-body-inner.html";
 
-/**
- * `home-body-inner` header `<div>` balances past the real nav (Hero sits inside that range), so merging
- * other pages with it prepends the **home Hero** onto shop / membership / legal pages. Terms has the same
- * chrome ids without that bleed.
- */
-const SLIM_CHROME_BODY = "terms-body-inner.html";
+/** Merged membership shells: strip GoDaddy Page utilities that force auto margins / min-height coupling. */
+const RELAX_PAGE_SHELL_FILES = new Set([
+  "m-login-body-inner.html",
+  "m-create-account-body-inner.html",
+  "m-orders-body-inner.html",
+]);
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
@@ -64,16 +65,18 @@ export function loadScrapedBody(filename: string): string {
     return rewriteMirrorAbsoluteUrls(fixPoweredByFooter(processed));
   }
 
+  /** Same header + footer shell as Home so utilities/icons match; strip hero/promo below. */
   const canonicalProcessed = processScrapedFile(
-    SLIM_CHROME_BODY,
-    readScraped(SLIM_CHROME_BODY),
+    HOME_BODY,
+    readScraped(HOME_BODY),
   );
   const canonicalFull = fixPoweredByFooter(canonicalProcessed);
 
   let html = mergeCanonicalChrome(canonicalFull, processed);
   html = fixPrimaryNavHighlight(html, navHighlightForFile(filename));
-  if (filename === "shop-body-inner.html") {
-    html = stripShopHeaderPromo(html);
+  html = stripShopHeaderPromo(html);
+  if (RELAX_PAGE_SHELL_FILES.has(filename)) {
+    html = relaxScrapedPageShellStretch(html);
   }
   return rewriteMirrorAbsoluteUrls(html);
 }

@@ -2,16 +2,16 @@
 export const firebaseClientConfig = {
   apiKey:
     process.env.NEXT_PUBLIC_FIREBASE_API_KEY ??
-    "AIzaSyB2_4XF8oAxwQd9Hg6XWb1q8QWP6uYSKRE",
+    "AIzaSyBmjmLne7PCPI6aEs2ljEWu8m0pSMd6JhI",
   authDomain:
-    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? "clubs-8fcb2.firebaseapp.com",
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? "clubs-8fcb2",
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? "sweettreats-b000c.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? "sweettreats-b000c",
   storageBucket:
     process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ??
-    "clubs-8fcb2.firebasestorage.app",
+    "sweettreats-b000c.firebasestorage.app",
   messagingSenderId:
-    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? "737809827285",
+    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? "199725193145",
   appId:
     process.env.NEXT_PUBLIC_FIREBASE_APP_ID ??
-    "1:737809827285:web:4e3ba89ef95e20e517695c",
+    "1:199725193145:web:499fcb785909e8b36d0868",
 } as const;

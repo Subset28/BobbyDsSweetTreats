@@ -140,9 +140,72 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 
 @media (max-width:520px){.membership-page{padding:28px 16px}.membership-page__container{padding:28px 20px}.membership-form__submit{width:100%}}
 
-.scraped-root:not(.scraped-shop-page) .page-inner{min-height:100vh}
+/* Exclude shop (handled above) and membership (merged shell + Page utilities caused footer gap). */
+.scraped-root:not(.scraped-shop-page):not(.scraped-membership-page) .page-inner{min-height:100vh}
+
+/* Membership routes: same idea as .scraped-shop-page — GoDaddy `[data-ux=Page]` carries c1-7…c1-a
+   utilities (e.g. .c1-7 > div { margin-top:auto }) plus min-height chains, which stretches the shell
+   and leaves a huge empty band between the SSO block and the footer. */
+.scraped-root.scraped-membership-page .layout,
+.scraped-root.scraped-membership-page [data-ux=Page],
+.scraped-root.scraped-membership-page .page-inner{
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-height:0!important;
+  height:auto!important;
+}
+body.x .scraped-root.scraped-membership-page [data-ux=Page] > .page-inner{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+body.x .scraped-root.scraped-membership-page .page-inner{display:block!important}
+body.x .scraped-root.scraped-membership-page .page-inner > .widget-footer{margin-top:0!important}
 
 .scraped-root{width:100%;min-width:0}
+
+/* Contact split: stretch the map column to the same height as the text column (flex row). */
+.scraped-root .widget-contact [data-ux=ContainerSplit]{
+  display:flex!important;
+  align-items:stretch!important;
+}
+.scraped-root .widget-contact [data-ux=SplitItem],
+.scraped-root .widget-contact [data-ux=SplitItemImage]{
+  display:flex!important;
+  flex-direction:column!important;
+  align-self:stretch!important;
+  min-height:0!important;
+}
+.scraped-root .widget-contact [data-ux=SplitItemImage] [data-ux=Map],
+.scraped-root .widget-contact [data-ux=SplitItemImage] [data-ux=Map] > [data-ux=Element]{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+
+/* Map iframe fills an absolutely positioned shell; “Get directions” follows as button or <a>. */
+.scraped-root .widget-contact [data-ux=SplitItemImage] div[data-ux=Block]:has(> [data-aid="CONTACT_MAP_REND"]){
+  position:relative!important;
+  flex:1 1 auto!important;
+  min-height:420px!important;
+  width:100%!important;
+}
+.scraped-root [data-aid="CONTACT_MAP_REND"]{z-index:0}
+.scraped-root [data-aid="CONTACT_MAP_REND"] + :is(button,a)[data-tccl*="get_directions"]{
+  position:absolute!important;
+  left:12px!important;
+  bottom:12px!important;
+  top:auto!important;
+  right:auto!important;
+  margin:0!important;
+  z-index:3!important;
+  align-self:auto!important;
+  width:auto!important;
+  max-width:calc(100% - 24px)!important;
+  text-decoration:none!important;
+  cursor:pointer!important;
+  box-sizing:border-box!important;
+}
 
 .scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul>li.nav-item{visibility:visible!important}
 
@@ -162,6 +225,8 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 .scraped-root nav[data-aid=HEADER_NAV_RENDERED]>ul>li.nav-item>a{white-space:nowrap;text-transform:none!important;letter-spacing:normal!important;font-size:16px!important;font-weight:400!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;min-height:40px!important;padding-top:0!important;padding-bottom:4px!important}
 
 .scraped-root .widget-header div[data-ux=Block]:has([id^=navBar-]){box-sizing:border-box!important;padding-bottom:24px!important;font-weight:400!important}
+
+.scraped-root.scraped-membership-page .widget-header div[data-ux=Block]:has([id^=navBar-]){padding-bottom:6px!important}
 
 .scraped-root nav[data-aid=HEADER_NAV_RENDERED]{padding-bottom:0!important;font-weight:400!important;line-height:24px!important}
 
@@ -229,7 +294,7 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 .scraped-root.scraped-shop-page section[data-aid="HEADER_SECTION"] [data-aid="HEADER_CTA_BTN"],
 .scraped-root.scraped-shop-page section[data-aid="HEADER_SECTION"] div[id^="tagline-container-"]{display:none!important}
 
-.scraped-root.scraped-shop-page .layout,.scraped-root.scraped-shop-page [data-ux=Page],.scraped-root.scraped-shop-page .page-inner{box-sizing:border-box;width:100%;max-width:none;min-height:0!important}
+.scraped-root.scraped-shop-page .layout,.scraped-root.scraped-shop-page [data-ux=Page],.scraped-root.scraped-shop-page .page-inner{box-sizing:border-box;width:100%;min-height:0!important}
 
 .scraped-shop-page .widget-shop,.scraped-shop-page .widget-shop>[data-ux=Widget],.scraped-shop-page #bs-9,.scraped-shop-page #ols-shop-container,.scraped-shop-page #ols-shop-container>section[data-ux=Section],.scraped-shop-page #ols-shop-container [data-container-id=ols-shop]{box-sizing:border-box;width:100%;max-width:100%;min-height:0!important}
 
@@ -242,6 +307,38 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 /* Tighten space below the header chrome on /shop (nav only, hero stripped). */
 .scraped-shop-page .widget-header section[data-aid="HEADER_SECTION"]{padding-bottom:0!important}
 
+/* Membership (login/signup/orders): same merged header as Home — strip GoDaddy vertical slack
+   (c1-q/c1-r section padding, c1-u inner margin-bottom, tall freemium placeholder) above main content. */
+.scraped-root.scraped-membership-page .widget-header [id^="freemium-ad"]{display:none!important}
+.scraped-root.scraped-membership-page .widget-header section[data-aid="HEADER_SECTION"]{
+  padding-top:0!important;
+  padding-bottom:0!important;
+  min-height:0!important;
+}
+.scraped-root.scraped-membership-page .widget-header section[data-aid="HEADER_SECTION"] > [data-ux=Block]{
+  margin-top:0!important;
+  margin-bottom:0!important;
+  min-height:0!important;
+}
+.scraped-root.scraped-membership-page .widget-header section[data-aid="HEADER_SECTION"] [data-ux=Container]{
+  padding-top:0!important;
+  padding-bottom:0!important;
+}
+.scraped-root.scraped-membership-page .widget-header [data-ux=Header]{min-height:0!important}
+.scraped-root.scraped-membership-page .widget-header section[data-aid="HEADER_SECTION"] [data-ux=Block]{
+  margin-top:0!important;
+  margin-bottom:0!important;
+  min-height:0!important;
+}
+
+/* Header 9: the `#navBar-*` column carries GoDaddy `c1-18` (`flex:1`) so Home/Shop sit in the middle
+   flex bucket between logo and utilities. Never zero that flex on a broad `.c1-18` selector — it
+   pulls the primary nav left. Pin flex on the nav mount only (all scraped routes). */
+.scraped-root .widget-header section[data-aid="HEADER_SECTION"] div[id^="navBar-"]{
+  flex:1 1 0!important;
+  min-width:0!important;
+}
+
 .scraped-shop-page .widget-footer{margin-block-start:0!important}
 
 .scraped-root .widget-footer,.scraped-root .widget-footer>[data-ux=Widget]{min-height:0!important}
@@ -249,6 +346,10 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 .scraped-root .widget-footer section[data-ux=Section]{padding-top:56px!important;padding-bottom:56px!important}
 
 @media (max-width:767px){.scraped-root .widget-footer section[data-ux=Section]{padding-top:40px!important;padding-bottom:40px!important}}
+
+.scraped-root.scraped-membership-login .widget-footer section[data-ux=Section]{padding-top:36px!important;padding-bottom:36px!important}
+
+@media (max-width:767px){.scraped-root.scraped-membership-login .widget-footer section[data-ux=Section]{padding-top:28px!important;padding-bottom:28px!important}}
 
 .scraped-root.scraped-shop-page .widget-footer [data-ux=Layout]{max-width:1280px!important;margin-left:auto!important;margin-right:auto!important;padding-left:24px!important;padding-right:24px!important}
 
@@ -362,7 +463,9 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 
 .bst-product-detail__price{margin:0;color:var(--site-accent-strong);font-family:Poppins,Arial,sans-serif;font-size:1.4rem;font-weight:600}
 
-.bst-product-detail__unit-price{margin:-8px 0 0;color:var(--site-muted);font-family:Cantarell,Arial,sans-serif;font-size:.96rem;line-height:1.5}
+.bst-product-detail__price-suffix{font-weight:500;color:var(--site-muted);font-size:0.92em}
+
+.bst-product-detail__subtotal{margin:4px 0 0;color:var(--site-fg);font-family:Poppins,Arial,sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:.01em}
 
 .bst-product-detail__description{margin:0;color:var(--site-fg);font-family:Cantarell,Arial,sans-serif;font-size:1rem;line-height:1.75;max-width:42rem}
 
@@ -471,7 +574,15 @@ html{scrollbar-gutter:stable}html,body{margin:0}
 
 .scraped-shop-page .bst-ols-cart__nav{margin:0 0 20px}
 
-.scraped-shop-page .bst-ols-cart__continue{color:#b4653c;font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:500;text-decoration:none}
+.scraped-shop-page .bst-ols-cart__continue{
+  color:#b4653c;
+  font-family:Poppins,Arial,sans-serif;
+  font-size:17px;
+  font-weight:500;
+  text-decoration:none;
+  display:inline-block;
+  transform:translateX(-80px);
+}
 
 .scraped-shop-page .bst-ols-cart__continue:hover{text-decoration:underline}
 
@@ -739,14 +850,23 @@ body.x .scraped-root ul.membership-sign-out li:has(a[id*="membership-sign-in"]){
 /* ── Sign-in & Create-account page redesign ──────────────────────────── */
 
 /* Remove any decorative background; use plain white */
-body.x .scraped-root.scraped-membership-login .widget-membership-sso-login > [data-ux=Section],
-body.x .scraped-root.scraped-membership-signup .widget-membership-create-account > [data-ux=Section]{
+body.x .scraped-root.scraped-membership-login .widget-membership-sso-login > [data-ux=Section]{
   background:#fff!important;
-  padding:60px 20px 40px!important;
-  min-height:100vh!important;
+  padding:10px 20px 18px!important;
+  min-height:0!important;
   display:flex!important;
   flex-direction:column!important;
   align-items:center!important;
+  justify-content:flex-start!important;
+}
+body.x .scraped-root.scraped-membership-signup .widget-membership-create-account > [data-ux=Section]{
+  background:#fff!important;
+  padding:24px 20px 40px!important;
+  min-height:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
 }
 
 /* Centre the inner container and cap its width */
@@ -771,6 +891,10 @@ body.x .scraped-root.scraped-membership-signup [data-aid=CREATE_ACCOUNT_HEADING_
   margin:0 0 36px!important;
   display:block!important;
 }
+body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_SSO_TITLE_REND]{
+  margin:0 0 16px!important;
+  transform:none!important;
+}
 
 /* Grid / GridCell: stack vertically, full width */
 body.x .scraped-root.scraped-membership-login .widget-membership-sso-login [data-ux=Grid],
@@ -781,6 +905,13 @@ body.x .scraped-root.scraped-membership-signup .widget-membership-create-account
   width:100%!important;
   max-width:100%!important;
   min-width:0!important;
+  min-height:0!important;
+  height:auto!important;
+  max-height:none!important;
+  /* GoDaddy ships c1-8e { aspect-ratio: 1/1 } on this grid — with width ~680px it forces ~680px tall “empty” band */
+  aspect-ratio:unset!important;
+  flex-grow:0!important;
+  flex-shrink:0!important;
   flex-basis:auto!important;
   padding:0!important;
   margin:0!important;
@@ -800,6 +931,7 @@ body.x .scraped-root.scraped-membership-signup [data-aid=CREATE_ACCOUNT_DESCRIPT
   margin:0 0 40px!important;
   line-height:1.6!important;
 }
+body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_SSO_MESSAGE_REND]{margin:0 0 22px!important}
 
 /* Form layout */
 body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND],
@@ -815,6 +947,7 @@ body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_
 body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] > div{
   margin-bottom:28px!important;
 }
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] > div{margin-bottom:18px!important}
 
 /* All text/password inputs – underline only */
 body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] .x-el-input:not([type=hidden]),
@@ -874,6 +1007,7 @@ body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM
   box-shadow:none!important;
   transition:opacity .15s ease!important;
 }
+body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] button[data-ux=ButtonPrimary]{margin:4px auto 0!important}
 
 body.x .scraped-root.scraped-membership-login form[data-aid=MEMBERSHIP_SSO_FORM_REND] button[data-ux=ButtonPrimary]:hover,
 body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] button[data-ux=ButtonPrimary]:hover{
@@ -890,7 +1024,7 @@ body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_SSO_REQ_RESET
   font-family:Cantarell,Arial,sans-serif!important;
   font-size:.95rem!important;
   text-decoration:none!important;
-  margin-top:20px!important;
+  margin-top:12px!important;
 }
 
 body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_SSO_REQ_RESET]:hover{
@@ -904,7 +1038,11 @@ body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM
   font-family:Cantarell,Arial,sans-serif!important;
   font-size:.95rem!important;
   color:#3d3d3d!important;
-  margin-top:24px!important;
+  margin-top:14px!important;
+  margin-bottom:0!important;
+  /* Storefront ships BodyAlpha with .c1-9b { text-decoration: line-through } on this line */
+  text-decoration:none!important;
+  text-decoration-line:none!important;
 }
 
 body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_REQUEST_ACCESS_REND] a,
@@ -912,6 +1050,8 @@ body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM
   color:#b2603b!important;
   font-weight:400!important;
   text-decoration:none!important;
+  text-decoration-line:none!important;
+  transform:none!important;
 }
 
 body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_REQUEST_ACCESS_REND] a:hover,
@@ -920,12 +1060,6 @@ body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM
 }
 
 /* Hide honeypot beacon field and its wrapper */
-
-/* Prevent strikethrough on membership login page text */
-body.x .scraped-root.scraped-membership-login [data-aid=MEMBERSHIP_REQUEST_ACCESS_REND] a,
-body.x .scraped-root.scraped-membership-login [data-aid=CREATE_ACCOUNT_FORM_REND] p a {
-  text-decoration: none !important;
-}
 body.x .scraped-root.scraped-membership-signup form[data-aid=CREATE_ACCOUNT_FORM_REND] > div:has([data-aid=CREATE_ACCOUNT_BEACON]){
   display:none!important;
 }
