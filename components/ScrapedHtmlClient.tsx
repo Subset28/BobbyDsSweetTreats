@@ -95,6 +95,15 @@ function isSearchUtilitiesClickTarget(target: Element | null): boolean {
   return false;
 }
 
+function closeMembershipAccountMenus(root: HTMLElement) {
+  root.querySelectorAll("span[id*='membership-icon'].bst-membership-menu-open").forEach((n) => {
+    n.classList.remove("bst-membership-menu-open");
+  });
+  root.querySelectorAll<HTMLElement>('a[data-aid="MEMBERSHIP_ICON_DESKTOP_RENDERED"]').forEach((a) => {
+    a.setAttribute("aria-expanded", "false");
+  });
+}
+
 function revealEmbeddedSearchInputs(root: HTMLElement): HTMLInputElement | null {
   const utility =
     root.querySelector<HTMLElement>('[id*="utility-menu" i], [id*="utility-menu"]') ||
@@ -207,7 +216,19 @@ export function ScrapedHtmlClient({
     function apply(loggedIn: boolean) {
       const el = document.getElementById(SCRAPED_ROOT_ID);
       if (!el) return;
+      closeMembershipAccountMenus(el as HTMLElement);
       el.dataset.bstAuth = loggedIn ? "1" : "0";
+
+      // Signed-in users: `/m/account` is the login scrape — send them to orders instead.
+      const accountHref = loggedIn ? "/m/orders" : "/m/account";
+      el.querySelectorAll<HTMLAnchorElement>('a[href="/m/account"]').forEach((a) => {
+        a.setAttribute("href", accountHref);
+      });
+      el.querySelectorAll<HTMLAnchorElement>(
+        'a[data-aid="MEMBERSHIP_ICON_DESKTOP_RENDERED"]',
+      ).forEach((a) => {
+        a.setAttribute("href", accountHref);
+      });
 
       // Rename "Create Account" link in logged-out dropdown to "Sign up"
       el.querySelectorAll<HTMLAnchorElement>('ul.membership-sign-out a[id*="membership-create"]').forEach((a) => {
@@ -222,8 +243,17 @@ export function ScrapedHtmlClient({
     }
 
     void import("@/lib/firebase/auth")
-      .then(({ subscribeAuth }) => {
+      .then(async ({ authStateReady, subscribeAuth, getFirebaseAuth }) => {
         if (cancelled) return;
+        try {
+          await authStateReady();
+        } catch {
+          /* ignore */
+        }
+        if (cancelled) return;
+
+        apply(!!getFirebaseAuth().currentUser);
+
         unsub = subscribeAuth((user) => {
           if (cancelled) return;
           apply(!!user);
@@ -249,6 +279,18 @@ export function ScrapedHtmlClient({
     const scrapedRoot = document.getElementById(SCRAPED_ROOT_ID);
     if (!scrapedRoot) return;
     const rootElement: HTMLElement = scrapedRoot;
+
+    function performScrapedSignOut() {
+      closeMembershipAccountMenus(rootElement);
+      void import("@/lib/firebase/auth").then(async ({ signOutFirebase }) => {
+        try {
+          await signOutFirebase();
+        } catch {
+          /* ignore */
+        }
+        window.location.assign("/m/login");
+      });
+    }
 
     function rewriteMembershipLink(a: HTMLAnchorElement) {
       try {
@@ -552,7 +594,54 @@ export function ScrapedHtmlClient({
       const normAnchor = target.closest("a");
       if (normAnchor) normalizeMirrorAbsoluteAnchors(normAnchor as HTMLAnchorElement);
 
+      const membershipWrap = target.closest("span[id*='membership-icon']");
+      const membershipMenu = target.closest("span[id*='membership-icon'] ul[role='menu']");
+      if (membershipMenu) {
+        const wrap = membershipMenu.closest("span[id*='membership-icon']");
+        wrap?.classList.remove("bst-membership-menu-open");
+        rootElement
+          .querySelectorAll<HTMLElement>('a[data-aid="MEMBERSHIP_ICON_DESKTOP_RENDERED"]')
+          .forEach((a) => a.setAttribute("aria-expanded", "false"));
+      }
+
+      const signOutHit = target.closest('[data-aid="MEMBERSHIP_SIGNOUT_LINK"]');
+      if (signOutHit && rootElement.contains(signOutHit)) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        performScrapedSignOut();
+        return;
+      }
+
+      const membershipIcon = target.closest(
+        'a[data-aid="MEMBERSHIP_ICON_DESKTOP_RENDERED"]',
+      ) as HTMLAnchorElement | null;
+      if (
+        membershipIcon &&
+        rootElement.contains(membershipIcon) &&
+        membershipIcon.contains(target as Node)
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        const span = membershipIcon.closest("span[id*='membership-icon']") as HTMLElement | null;
+        if (span) {
+          const willOpen = !span.classList.contains("bst-membership-menu-open");
+          closeMembershipAccountMenus(rootElement);
+          if (willOpen) {
+            span.classList.add("bst-membership-menu-open");
+            membershipIcon.setAttribute("aria-expanded", "true");
+          }
+        }
+        return;
+      }
+
+      if (!membershipWrap) {
+        closeMembershipAccountMenus(rootElement);
+      }
+
       if (isCartUtilitiesClickTarget(target)) {
+        closeMembershipAccountMenus(rootElement);
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -561,6 +650,7 @@ export function ScrapedHtmlClient({
       }
 
       if (isSearchUtilitiesClickTarget(target)) {
+        closeMembershipAccountMenus(rootElement);
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -575,6 +665,7 @@ export function ScrapedHtmlClient({
 
       const cartAnchor = target.closest("a");
       if (isShoppingCartUtilitiesControl(cartAnchor)) {
+        closeMembershipAccountMenus(rootElement);
         e.preventDefault();
         e.stopPropagation();
         window.location.assign("/cart");
@@ -616,11 +707,61 @@ export function ScrapedHtmlClient({
       }
     }
 
+    function handleDocumentClickCapture(e: MouseEvent) {
+      const t = e.target as Element | null;
+      if (!t || rootElement.contains(t)) return;
+      closeMembershipAccountMenus(rootElement);
+    }
+
+    function handleMembershipKeydown(e: KeyboardEvent) {
+      const t = e.target as Element | null;
+      if (e.key === "Escape") {
+        if (!rootElement.querySelector("span[id*='membership-icon'].bst-membership-menu-open")) {
+          return;
+        }
+        e.preventDefault();
+        closeMembershipAccountMenus(rootElement);
+        return;
+      }
+      const signOutEl = t?.closest('[data-aid="MEMBERSHIP_SIGNOUT_LINK"]');
+      if (
+        (e.key === "Enter" || e.key === " ") &&
+        signOutEl &&
+        rootElement.contains(signOutEl)
+      ) {
+        e.preventDefault();
+        performScrapedSignOut();
+        return;
+      }
+      if (e.key !== "Enter" && e.key !== " ") return;
+      const icon = t?.closest(
+        'a[data-aid="MEMBERSHIP_ICON_DESKTOP_RENDERED"]',
+      ) as HTMLAnchorElement | null;
+      if (!icon || !rootElement.contains(icon)) return;
+      if (t?.closest('ul[role="menu"]')) return;
+      e.preventDefault();
+      const span = icon.closest("span[id*='membership-icon']") as HTMLElement | null;
+      if (!span) return;
+      const willOpen = !span.classList.contains("bst-membership-menu-open");
+      closeMembershipAccountMenus(rootElement);
+      if (willOpen) {
+        span.classList.add("bst-membership-menu-open");
+        icon.setAttribute("aria-expanded", "true");
+      }
+    }
+
     // Simple search: find first element containing query and jump to it.
     function handleSearchSubmit(e: Event) {
       const form = e.target as HTMLFormElement | null;
       if (!form || form.tagName !== "FORM") return;
       if (!rootElement.contains(form)) return;
+      const aid = form.getAttribute("data-aid") || "";
+      if (
+        aid === "MEMBERSHIP_SSO_FORM_REND" ||
+        aid === "CREATE_ACCOUNT_FORM_REND"
+      ) {
+        return;
+      }
       e.preventDefault();
       const input = form.querySelector(
         "input[type=text], input[type=search], input[name=q], input[name=query]",
@@ -639,9 +780,22 @@ export function ScrapedHtmlClient({
       rootElement.querySelectorAll("a").forEach((a) =>
         rewriteMembershipLink(a as HTMLAnchorElement),
       );
+      rootElement
+        .querySelectorAll<HTMLAnchorElement>('a[data-aid="MEMBERSHIP_ICON_DESKTOP_RENDERED"]')
+        .forEach((a) => {
+          a.setAttribute("aria-expanded", "false");
+        });
+      rootElement
+        .querySelectorAll<HTMLElement>('[data-aid="MEMBERSHIP_SIGNOUT_LINK"]')
+        .forEach((el) => {
+          el.setAttribute("role", "button");
+          el.tabIndex = 0;
+        });
       removeShopPromo();
       requestAnimationFrame(() => removeShopPromo());
       cleanupGallery = setupGallery();
+      document.addEventListener("click", handleDocumentClickCapture, true);
+      document.addEventListener("keydown", handleMembershipKeydown, true);
       rootElement.addEventListener("click", handleClick, true);
       rootElement
         .querySelectorAll("form")
@@ -661,6 +815,8 @@ export function ScrapedHtmlClient({
 
     return () => {
       try {
+        document.removeEventListener("click", handleDocumentClickCapture, true);
+        document.removeEventListener("keydown", handleMembershipKeydown, true);
         rootElement.removeEventListener("click", handleClick, true);
         rootElement
           .querySelectorAll("form")

@@ -1,3 +1,5 @@
+"use client";
+
 import { ScrapedHtmlClient, type ScrapedHtmlProps } from "@/components/ScrapedHtmlClient";
 import { SCRAPED_ROOT_ID } from "@/lib/scrapedHtmlRootId";
 

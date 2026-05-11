@@ -25,7 +25,6 @@ const HOME_BODY = "home-body-inner.html";
 const RELAX_PAGE_SHELL_FILES = new Set([
   "m-login-body-inner.html",
   "m-create-account-body-inner.html",
-  "m-orders-body-inner.html",
 ]);
 
 const CONTENT_DIR = path.join(process.cwd(), "content");

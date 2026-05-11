@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ScrapedHtml } from "@/components/ScrapedHtml";
+import { MembershipLoginPageClient } from "@/components/membership/MembershipLoginPageClient";
 import { loadScrapedBody } from "@/lib/loadScrapedBody";
 
 export const metadata: Metadata = {
@@ -11,11 +11,5 @@ export const metadata: Metadata = {
 /** Same markup as live `/m/login` (mirrors legacy storefront route). */
 export default function MembershipLoginAliasPage() {
   const html = loadScrapedBody("m-login-body-inner.html");
-  return (
-    <ScrapedHtml
-      html={html}
-      className="scraped-membership-page scraped-membership-login"
-      membershipForms="login"
-    />
-  );
+  return <MembershipLoginPageClient loginHtml={html} />;
 }

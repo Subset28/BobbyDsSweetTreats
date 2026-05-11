@@ -17,10 +17,20 @@ import {
 
 import { getFirebaseApp } from "./clientApp";
 
+/** Shared Auth instance for listeners and `authStateReady()`. */
 export function getFirebaseAuth(): Auth {
   const auth = getAuth(getFirebaseApp());
   void setPersistence(auth, browserLocalPersistence);
   return auth;
+}
+
+/** Resolves when persisted session has been loaded (avoids a false `null` flash). */
+export async function authStateReady(): Promise<void> {
+  const auth = getFirebaseAuth();
+  const ready = auth as unknown as { authStateReady?: () => Promise<void> };
+  if (typeof ready.authStateReady === "function") {
+    await ready.authStateReady();
+  }
 }
 
 export function mapFirebaseAuthError(err: unknown): string {

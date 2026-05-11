@@ -134,13 +134,6 @@ export function attachMembershipScrapeForms(
       };
     }
 
-    if (form.dataset.bstFirebaseBound === "true") {
-      return () => {
-        disposers.forEach((d) => d());
-      };
-    }
-    form.dataset.bstFirebaseBound = "true";
-
     const emailInput = form.querySelector<HTMLInputElement>(
       '[data-aid="CREATE_ACCOUNT_EMAIL"]',
     );

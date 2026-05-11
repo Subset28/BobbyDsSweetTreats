@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { ScrapedHtml } from "@/components/ScrapedHtml";
-import { RequireAuth } from "@/components/RequireAuth";
-import { loadScrapedBody } from "@/lib/loadScrapedBody";
+
+import { MembershipOrdersApp } from "@/components/orders/MembershipOrdersApp";
 
 export const metadata: Metadata = {
   title: "Orders | BobbieD's Sweet Treats",
@@ -9,14 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function MembershipOrdersPage() {
-  const html = loadScrapedBody("m-orders-body-inner.html");
-  return (
-    <>
-      <RequireAuth />
-      <ScrapedHtml
-        html={html}
-        className="scraped-membership-page scraped-membership-orders"
-      />
-    </>
-  );
+  return <MembershipOrdersApp />;
 }
