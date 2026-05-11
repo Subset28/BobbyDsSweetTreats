@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ProductDetailClient } from "@/components/product/ProductDetailClient";
+import { SiteShell } from "@/components/site/SiteShell";
 import {
   PRODUCT_CATALOG,
   getProductBySlug,
@@ -26,23 +27,25 @@ export default async function ProductPage({
   }
 
   return (
-    <main className="bst-product-page">
-      <div className="bst-product-page__crumbs">
-        <Link href="/shop">Shop</Link>
-        <span aria-hidden="true">/</span>
-        <span>{product.title}</span>
-      </div>
-
-      <section className="bst-product-page__shell">
-        <div className="bst-product-page__media">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={product.image} alt={product.alt} />
+    <SiteShell>
+      <main className="bst-product-page">
+        <div className="bst-product-page__crumbs">
+          <Link href="/shop">Shop</Link>
+          <span aria-hidden="true">/</span>
+          <span>{product.title}</span>
         </div>
 
-        <div className="bst-product-page__panel">
-          <ProductDetailClient product={product} />
-        </div>
-      </section>
-    </main>
+        <section className="bst-product-page__shell">
+          <div className="bst-product-page__media">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={product.image} alt={product.alt} />
+          </div>
+
+          <div className="bst-product-page__panel">
+            <ProductDetailClient product={product} />
+          </div>
+        </section>
+      </main>
+    </SiteShell>
   );
 }

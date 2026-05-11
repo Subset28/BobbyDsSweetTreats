@@ -24,24 +24,21 @@ function formatPrice(value: number): string {
 }
 
 export function ProductDetailClient({ product }: Props) {
-  const [variantId, setVariantId] = useState(product.variants[0]?.id ?? "default");
   const [quantity, setQuantity] = useState(1);
   const [notice, setNotice] = useState<string | null>(null);
 
-  const variant = product.variants.find((entry) => entry.id === variantId) ?? product.variants[0];
-  const unitPrice = variant?.price ?? product.price;
+  const unitPrice = product.price;
   const lineTotal = unitPrice * quantity;
 
   const handleAdd = () => {
-    if (!variant) return;
     try {
       const cart = readCart();
       const next = addToCart(cart, {
         slug: product.slug,
         title: product.title,
-        variantId: variant.id,
-        variantLabel: variant.label,
-        price: variant.price,
+        variantId: "each",
+        variantLabel: "Each",
+        price: unitPrice,
         quantity,
         imageSrc: product.image,
         description: product.description,
@@ -69,24 +66,6 @@ export function ProductDetailClient({ product }: Props) {
       <p className="bst-product-detail__description">{product.description}</p>
 
       <div className="bst-product-detail__field">
-        <div className="bst-product-detail__label">Size</div>
-        <div className="bst-product-detail__variant-list" role="group" aria-label="Size options">
-          {product.variants.map((entry) => (
-            <button
-              key={entry.id}
-              type="button"
-              className={`bst-product-detail__variant${entry.id === variantId ? " is-active" : ""}`}
-              aria-pressed={entry.id === variantId}
-              onClick={() => setVariantId(entry.id)}
-            >
-              <span>{entry.label}</span>
-              <span>{formatPrice(entry.price)}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="bst-product-detail__field">
         <div className="bst-product-detail__label">Quantity</div>
         <div className="bst-product-detail__quantity">
           <button type="button" onClick={() => setQuantity((value) => Math.max(1, value - 1))} aria-label="Decrease quantity">
@@ -98,6 +77,18 @@ export function ProductDetailClient({ product }: Props) {
           </button>
         </div>
       </div>
+
+      {quantity > 1 ? (
+        <div className="bst-product-detail__subtotal-pop" role="status" aria-live="polite">
+          <div className="bst-product-detail__subtotal-row">
+            <span className="bst-product-detail__subtotal-label">Subtotal</span>
+            <span className="bst-product-detail__subtotal-value">{formatPrice(lineTotal)}</span>
+          </div>
+          <p className="bst-product-detail__subtotal-detail">
+            {formatPrice(unitPrice)} × {quantity}
+          </p>
+        </div>
+      ) : null}
 
       <div className="bst-product-detail__actions">
         <button type="button" className="bst-product-detail__add" onClick={handleAdd}>
@@ -112,10 +103,6 @@ export function ProductDetailClient({ product }: Props) {
         <p className="bst-product-detail__notice" role="status" aria-live="polite">
           {notice}
         </p>
-      ) : null}
-
-      {variant?.description ? (
-        <p className="bst-product-detail__variant-note">{variant.description}</p>
       ) : null}
     </div>
   );

@@ -1,20 +1,29 @@
 import type { Metadata } from "next";
-import { ScrapedHtml } from "@/components/ScrapedHtml";
-import { loadScrapedBody } from "@/lib/loadScrapedBody";
+
+import { AuthShell } from "@/components/auth/AuthShell";
+import { LoginForm } from "@/components/auth/LoginForm";
 
 export const metadata: Metadata = {
-  title: "Login | BobbieD's Sweet Treats",
+  title: "Sign in | BobbieD's Sweet Treats",
   description: "Sign in to manage your BobbieD's Sweet Treats account.",
 };
 
-/** Alias for scraped `/m/login` markup (bookmark-friendly). */
 export default function LoginPage() {
-  const html = loadScrapedBody("m-login-body-inner.html");
   return (
-    <ScrapedHtml
-      html={html}
-      className="scraped-membership-page scraped-membership-login"
-      membershipForms="login"
-    />
+    <AuthShell
+      badge="Welcome back"
+      title="Sign in to your account"
+      description="Track orders, save favorite treats, and breeze through checkout."
+      points={[
+        "Track orders and view your purchase history",
+        "Save favorites to find them again later",
+        "Speed through checkout with saved details",
+      ]}
+      footerPrompt="Need an account?"
+      footerLinkHref="/signup"
+      footerLinkLabel="Create one"
+    >
+      <LoginForm />
+    </AuthShell>
   );
 }

@@ -1,13 +1,19 @@
-import { CartStorefrontMount } from "@/components/CartStorefrontMount";
-import { ScrapedHtml } from "@/components/ScrapedHtml";
-import { loadScrapedBody } from "@/lib/loadScrapedBody";
+import type { Metadata } from "next";
+
+import { CartView } from "@/components/cart/CartView";
+import { SiteShell } from "@/components/site/SiteShell";
+
+export const metadata: Metadata = {
+  title: "Cart | BobbieD's Sweet Treats",
+  description: "Review and check out the treats in your cart.",
+};
 
 export default function CartPage() {
-  const html = loadScrapedBody("cart-body-inner.html");
   return (
-    <>
-      <ScrapedHtml html={html} className="scraped-shop-page" />
-      <CartStorefrontMount />
-    </>
+    <SiteShell>
+      <section className="bst-cart-page">
+        <CartView />
+      </section>
+    </SiteShell>
   );
 }

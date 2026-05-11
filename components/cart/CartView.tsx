@@ -1,15 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
 
-import {
-  computeCheckoutTotals,
-  formatTaxPercentLabel,
-  PRIORITY_MAIL_FLAT_USD,
-  SALES_TAX_RATE,
-} from "@/lib/checkoutTotals";
 import {
   type CartItem,
   emitCartChange,
@@ -17,6 +10,12 @@ import {
   saveCart,
   updateCartItemQuantity,
 } from "@/lib/cart";
+import {
+  computeCheckoutTotals,
+  formatTaxPercentLabel,
+  PRIORITY_MAIL_FLAT_USD,
+  SALES_TAX_RATE,
+} from "@/lib/checkoutTotals";
 
 function formatPrice(value: number): string {
   return new Intl.NumberFormat("en-US", {
@@ -30,39 +29,7 @@ function usdLabel(value: number): string {
   return `${formatPrice(value)} USD`;
 }
 
-export function CartStorefrontMount() {
-  const [mount, setMount] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    let raf = 0;
-    let attempts = 0;
-
-    function resolveMount(): HTMLElement | null {
-      return document.querySelector<HTMLElement>(
-        '#ols-shop-container [data-container-id="ols-shop"] > div[data-ux="Block"]',
-      );
-    }
-
-    function tick() {
-      if (cancelled) return;
-      const el = resolveMount();
-      if (el) {
-        setMount(el);
-        return;
-      }
-      if (attempts++ < 120) {
-        raf = requestAnimationFrame(tick);
-      }
-    }
-
-    tick();
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
-    };
-  }, []);
-
+export function CartView() {
   const [cart, setCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
@@ -70,7 +37,8 @@ export function CartStorefrontMount() {
     load();
     const onChange = () => load();
     window.addEventListener("bds:cart:change", onChange as EventListener);
-    return () => window.removeEventListener("bds:cart:change", onChange as EventListener);
+    return () =>
+      window.removeEventListener("bds:cart:change", onChange as EventListener);
   }, []);
 
   function sync(next: CartItem[]) {
@@ -78,17 +46,6 @@ export function CartStorefrontMount() {
     saveCart(next);
     emitCartChange(next);
   }
-
-  if (!mount) return null;
-
-  return createPortal(<CartPortalBody cart={cart} sync={sync} />, mount);
-}
-
-function CartPortalBody(props: {
-  cart: CartItem[];
-  sync: (next: CartItem[]) => void;
-}) {
-  const { cart, sync } = props;
 
   function removeItem(index: number) {
     const next = [...cart];
@@ -104,7 +61,8 @@ function CartPortalBody(props: {
     sync([]);
   }
 
-  const { subtotal, priorityMail, estimatedTax, total } = computeCheckoutTotals(cart);
+  const { subtotal, priorityMail, estimatedTax, total } =
+    computeCheckoutTotals(cart);
 
   return (
     <div className="bst-ols-cart">
@@ -140,7 +98,7 @@ function CartPortalBody(props: {
                     <td className="bst-ols-cart__td-product">
                       <div className="bst-ols-cart__product">
                         {item.imageSrc ? (
-                          // eslint-disable-next-line @next/next/no-img-element
+                          /* eslint-disable-next-line @next/next/no-img-element */
                           <img
                             className="bst-ols-cart__thumb"
                             src={item.imageSrc}
@@ -149,18 +107,27 @@ function CartPortalBody(props: {
                             height={72}
                           />
                         ) : (
-                          <span className="bst-ols-cart__thumb bst-ols-cart__thumb--placeholder" aria-hidden />
+                          <span
+                            className="bst-ols-cart__thumb bst-ols-cart__thumb--placeholder"
+                            aria-hidden
+                          />
                         )}
                         <div className="bst-ols-cart__product-text">
                           <div className="bst-ols-cart__title">{item.title}</div>
                           {item.variantLabel ? (
-                            <div className="bst-ols-cart__variant">{item.variantLabel}</div>
+                            <div className="bst-ols-cart__variant">
+                              {item.variantLabel}
+                            </div>
                           ) : null}
-                          <div className="bst-ols-cart__mobile-unit">{usdLabel(item.price)}</div>
+                          <div className="bst-ols-cart__mobile-unit">
+                            {usdLabel(item.price)}
+                          </div>
                         </div>
                       </div>
                     </td>
-                    <td className="bst-ols-cart__td-unit">{usdLabel(item.price)}</td>
+                    <td className="bst-ols-cart__td-unit">
+                      {usdLabel(item.price)}
+                    </td>
                     <td className="bst-ols-cart__td-qty">
                       <div className="bst-ols-cart__qty-cell">
                         <input
@@ -170,8 +137,8 @@ function CartPortalBody(props: {
                           step={1}
                           aria-label={`Quantity for ${item.title}`}
                           value={item.quantity}
-                          onChange={(e) => {
-                            const n = Number.parseInt(e.target.value, 10);
+                          onChange={(event) => {
+                            const n = Number.parseInt(event.target.value, 10);
                             if (!Number.isFinite(n) || n < 1) return;
                             updateQuantity(item.id, n);
                           }}
@@ -186,7 +153,9 @@ function CartPortalBody(props: {
                         </button>
                       </div>
                     </td>
-                    <td className="bst-ols-cart__td-line">{usdLabel(item.price * item.quantity)}</td>
+                    <td className="bst-ols-cart__td-line">
+                      {usdLabel(item.price * item.quantity)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -206,7 +175,9 @@ function CartPortalBody(props: {
                 </div>
               ) : null}
               <div className="bst-ols-cart__subline">
-                <span>Estimated sales tax ({formatTaxPercentLabel(SALES_TAX_RATE)})</span>
+                <span>
+                  Estimated sales tax ({formatTaxPercentLabel(SALES_TAX_RATE)})
+                </span>
                 <span>{usdLabel(estimatedTax)}</span>
               </div>
               <div className="bst-ols-cart__subline bst-ols-cart__subline--grand">
@@ -218,10 +189,18 @@ function CartPortalBody(props: {
               {`Chocolate-covered fruit ships USPS Priority Mail ($${PRIORITY_MAIL_FLAT_USD}). Estimated tax applies to items and Priority Mail when applicable. Final tax may vary.`}
             </p>
             <div className="bst-ols-cart__actions">
-              <button type="button" className="bst-ols-cart__linkish" onClick={() => sync(readCart())}>
+              <button
+                type="button"
+                className="bst-ols-cart__linkish"
+                onClick={() => sync(readCart())}
+              >
                 Update cart
               </button>
-              <button type="button" className="bst-ols-cart__linkish" onClick={clearCart}>
+              <button
+                type="button"
+                className="bst-ols-cart__linkish"
+                onClick={clearCart}
+              >
                 Clear cart
               </button>
             </div>

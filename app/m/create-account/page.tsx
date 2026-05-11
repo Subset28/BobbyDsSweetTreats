@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { ScrapedHtml } from "@/components/ScrapedHtml";
-import { loadScrapedBody } from "@/lib/loadScrapedBody";
+
+import { MembershipShell } from "@/components/auth/MembershipShell";
+import { SignupForm } from "@/components/auth/SignupForm";
 
 export const metadata: Metadata = {
   title: "Create account | BobbieD's Sweet Treats",
@@ -8,12 +9,13 @@ export const metadata: Metadata = {
 };
 
 export default function MembershipCreateAccountPage() {
-  const html = loadScrapedBody("m-create-account-body-inner.html");
   return (
-    <ScrapedHtml
-      html={html}
-      className="scraped-membership-page scraped-membership-signup"
-      membershipForms="signup"
-    />
+    <MembershipShell
+      eyebrow="ACCOUNT"
+      title="CREATE ACCOUNT"
+      description="Create an account to track orders and access member-only pages."
+    >
+      <SignupForm variant="membership" />
+    </MembershipShell>
   );
 }

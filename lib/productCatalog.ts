@@ -1,19 +1,13 @@
-export type ProductVariant = {
-  id: string;
-  label: string;
-  price: number;
-  description?: string;
-};
-
 export type ProductCatalogItem = {
   slug: string;
   title: string;
   description: string;
+  /** Per-unit price (quantity multiplies this). */
   price: number;
   image: string;
   alt: string;
+  /** Optional shop-grid price label; defaults can be derived from `price`. */
   cardPrice?: string;
-  variants: ProductVariant[];
   aliases: string[];
 };
 
@@ -27,7 +21,6 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/Strawberry%203-0ddcf1c.jpg",
     alt: "A dozen chocolate covered strawberries",
     cardPrice: "$35",
-    variants: [{ id: "dozen", label: "Dozen", price: 35 }],
     aliases: ["strawberries", "chocolate covered strawberries", "dozen strawberries"],
   },
   {
@@ -40,7 +33,6 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/Screenshot_20260205_010219_Messages-32abb21.jpg",
     alt: "Valentine's Day treat box",
     cardPrice: "$30",
-    variants: [{ id: "box", label: "Standard Box", price: 30 }],
     aliases: ["valentines day treat box", "treat box", "valentine box"],
   },
   {
@@ -51,28 +43,18 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
     image:
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/Vanilla-e33e171.jpg",
     alt: "Vanilla cake pops",
-    cardPrice: "$3 / $16.50 / $33",
-    variants: [
-      { id: "single", label: "1 cake pop", price: 3 },
-      { id: "six", label: "6 cake pops", price: 16.5 },
-      { id: "dozen", label: "12 cake pops", price: 33 },
-    ],
+    cardPrice: "$3",
     aliases: ["vanilla cake pops", "vanilla"],
   },
   {
     slug: "chocolate-covered-pretzels",
     title: "Chocolate Covered Pretzels",
     description: "Delicious pretzels covered in chocolate and sprinkles.",
-    price: 24,
+    price: 2,
     image:
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/Pretzel%202-51ae0c4.jpg",
     alt: "Chocolate covered pretzels",
-    cardPrice: "$2 / $12 / $24",
-    variants: [
-      { id: "single", label: "1 pretzel pack", price: 2 },
-      { id: "six", label: "6 pretzel pack", price: 12 },
-      { id: "dozen", label: "12 pretzel pack", price: 24 },
-    ],
+    cardPrice: "$2",
     aliases: ["chocolate covered pretzels", "pretzels"],
   },
   {
@@ -84,10 +66,6 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/IMG_20260205_201535_(6)-2b5f174.jpg",
     alt: "Chocolate strawberry bouquet",
     cardPrice: "$50",
-    variants: [
-      { id: "12", label: "12 strawberries", price: 50 },
-      { id: "18", label: "18 strawberries", price: 60 },
-    ],
     aliases: ["chocolate strawberry bouquet", "bouquet"],
   },
   {
@@ -98,28 +76,18 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
     image:
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/Confetti-9f1643d.jpg",
     alt: "Confetti cake pops",
-    cardPrice: "$3 / $16.50 / $33",
-    variants: [
-      { id: "single", label: "1 cake pop", price: 3 },
-      { id: "six", label: "6 cake pops", price: 16.5 },
-      { id: "dozen", label: "12 cake pops", price: 33 },
-    ],
+    cardPrice: "$3",
     aliases: ["confetti cake pops", "confetti cake", "confetti"],
   },
   {
     slug: "heart-shaped-brownies",
     title: "Heart-Shaped Brownies",
     description: "A delightful assortment of heart-shaped brownies, perfect for gifting or snacking.",
-    price: 21,
+    price: 4,
     image:
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/IMG_20260127_220352-11ae0be.png",
     alt: "Heart-shaped brownies",
-    cardPrice: "$4 / $21 / $42",
-    variants: [
-      { id: "single", label: "1 brownie", price: 4 },
-      { id: "six", label: "6 brownies", price: 21 },
-      { id: "dozen", label: "12 brownies", price: 42 },
-    ],
+    cardPrice: "$4",
     aliases: ["heart shaped brownies", "brownies", "heart brownies"],
   },
   {
@@ -130,12 +98,7 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
     image:
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/Chocolate%20crunch%20cake%20pop-65a7af0.jpg",
     alt: "Chocolate crunch cake pop",
-    cardPrice: "$3 / $16.50 / $33",
-    variants: [
-      { id: "single", label: "1 cake pop", price: 3 },
-      { id: "six", label: "6 cake pops", price: 16.5 },
-      { id: "dozen", label: "12 cake pops", price: 33 },
-    ],
+    cardPrice: "$3",
     aliases: ["chocolate crunch cake pop", "chocolate crunch", "crunch cake pop"],
   },
   {
@@ -146,12 +109,7 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
     image:
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/Strawberry-Shortcake-1-128c58b.jpg",
     alt: "Strawberry shortcake pops",
-    cardPrice: "$3 / $16.50 / $33",
-    variants: [
-      { id: "single", label: "1 cake pop", price: 3 },
-      { id: "six", label: "6 cake pops", price: 16.5 },
-      { id: "dozen", label: "12 cake pops", price: 33 },
-    ],
+    cardPrice: "$3",
     aliases: ["strawberry shortcake pops", "strawberry shortcake"],
   },
   {
@@ -162,12 +120,7 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
     image:
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/IMG_20260127_220351_(1)-a5612aa.jpg",
     alt: "Nutella cake pops",
-    cardPrice: "$3 / $16.50 / $33",
-    variants: [
-      { id: "single", label: "1 cake pop", price: 3 },
-      { id: "six", label: "6 cake pops", price: 16.5 },
-      { id: "dozen", label: "12 cake pops", price: 33 },
-    ],
+    cardPrice: "$3",
     aliases: ["nutella cake pops", "chocolate hazelnut", "hazelnut cake pops"],
   },
   {
@@ -180,7 +133,6 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/Screenshot_20260205_010206_Messages-cb63eb3.jpg",
     alt: "Chocolate covered strawberries gift box",
     cardPrice: "$40",
-    variants: [{ id: "box", label: "Gift box", price: 40 }],
     aliases: ["gift box", "strawberries gift box", "chocolate covered strawberries gift box"],
   },
   {
@@ -192,7 +144,6 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/chocolate_covered_oreos_recipe-a8ca351.jpg",
     alt: "Chocolate covered Oreos",
     cardPrice: "$30",
-    variants: [{ id: "box", label: "Oreo box", price: 30 }],
     aliases: ["chocolate covered oreos", "oreos"],
   },
   {
@@ -205,7 +156,6 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/Bark%202-5b08dd3.jpg",
     alt: "Valentine's Day chocolate bark",
     cardPrice: "$20",
-    variants: [{ id: "bar", label: "Chocolate bark slab", price: 20 }],
     aliases: ["valentines day chocolate bark", "chocolate bark", "bark"],
   },
   {
@@ -218,7 +168,6 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/Content-Creator-Project.png",
     alt: "Special Valentine's Day set",
     cardPrice: "$50",
-    variants: [{ id: "set", label: "Gift set", price: 50 }],
     aliases: ["special valentines day set", "valentines day set", "i love you box"],
   },
   {
@@ -231,7 +180,6 @@ export const PRODUCT_CATALOG: ProductCatalogItem[] = [
       "https://img1.wsimg.com/isteam/ip/60198da3-e16c-45af-9193-df0c03c69433/IMG_20260207_195502.jpg",
     alt: "Chocolate covered peanut butter balls",
     cardPrice: "$12",
-    variants: [{ id: "dozen", label: "Dozen", price: 12 }],
     aliases: ["chocolate covered peanut butter balls", "peanut butter balls"],
   },
 ];

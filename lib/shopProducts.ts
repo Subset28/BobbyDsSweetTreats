@@ -9,7 +9,7 @@ export type ShopProduct = {
 
 /**
  * Slug order matches the legacy storefront “Most popular” ordering.
- * Listing prices are the single storefront amounts shown on each product card.
+ * Listing prices come from each catalog item’s `cardPrice` (single unit).
  */
 const SHOP_ORDER = [
   "a-dozen-chocolate-covered-strawberries",
@@ -28,25 +28,6 @@ const SHOP_ORDER = [
   "special-valentines-day-set",
   "chocolate-covered-peanut-butter-balls",
 ] as const;
-
-/** Price text shown on shop cards. */
-const STOREFRONT_LIST_PRICE: Record<(typeof SHOP_ORDER)[number], string> = {
-  "a-dozen-chocolate-covered-strawberries": "$35",
-  "valentines-day-treat-box": "$30",
-  "vanilla-cake-pops": "$3",
-  "chocolate-covered-pretzels": "$24",
-  "chocolate-strawberry-bouquet": "$50",
-  "confetti-cake-pops": "$3",
-  "heart-shaped-brownies": "$21",
-  "chocolate-crunch-cake-pop": "$3",
-  "strawberry-shortcake-pops": "$3",
-  "nutella-cake-pops": "$3",
-  "chocolate-covered-strawberries-gift-box": "$40",
-  "chocolate-covered-oreos": "$30",
-  "valentines-day-chocolate-bark": "$20",
-  "special-valentines-day-set": "$50",
-  "chocolate-covered-peanut-butter-balls": "$12",
-};
 
 /** Prefer mirrored `/site-media/` assets when present; else catalog CDN URL. */
 const LOCAL_CARD_IMAGE: Partial<Record<(typeof SHOP_ORDER)[number], string>> = {
@@ -70,11 +51,17 @@ function catalogBySlug(slug: (typeof SHOP_ORDER)[number]) {
   return item;
 }
 
+function formatListPrice(p: ReturnType<typeof catalogBySlug>): string {
+  if (p.cardPrice) return p.cardPrice;
+  const n = p.price;
+  return n % 1 === 0 ? `$${n}` : `$${n.toFixed(2)}`;
+}
+
 export const SHOP_PRODUCTS: ShopProduct[] = SHOP_ORDER.map((slug) => {
   const p = catalogBySlug(slug);
   return {
     title: p.title,
-    price: STOREFRONT_LIST_PRICE[slug],
+    price: formatListPrice(p),
     imageSrc: LOCAL_CARD_IMAGE[slug] ?? p.image,
   };
 });

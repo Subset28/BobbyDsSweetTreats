@@ -1,13 +1,20 @@
-import { ShopSortController } from "@/components/ShopSortController";
-import { ScrapedHtml } from "@/components/ScrapedHtml";
-import { loadScrapedBody } from "@/lib/loadScrapedBody";
+import type { Metadata } from "next";
 
-export default function ShopPage() {
-  const html = loadScrapedBody("shop-body-inner.html");
+import { ShopPage } from "@/components/shop/ShopPage";
+import { SiteShell } from "@/components/site/SiteShell";
+
+export const metadata: Metadata = {
+  title: "Shop | BobbieD's Sweet Treats",
+  description:
+    "Browse BobbieD's Sweet Treats: handmade chocolate covered strawberries, cake pops, brownies, pretzels, and more.",
+};
+
+export default function Shop() {
   return (
-    <>
-      <ScrapedHtml html={html} className="scraped-shop-page" />
-      <ShopSortController />
-    </>
+    <SiteShell>
+      <section className="bst-shop-page">
+        <ShopPage />
+      </section>
+    </SiteShell>
   );
 }

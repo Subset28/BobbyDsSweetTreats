@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { SiteHeader } from "@/components/site/SiteHeader";
+
 type AuthShellProps = {
   badge: string;
   title: string;
@@ -23,32 +26,38 @@ export function AuthShell({
   children,
 }: AuthShellProps) {
   return (
-    <main className="auth-page">
-      <div className="auth-page__orb auth-page__orb--left" aria-hidden="true" />
-      <div className="auth-page__orb auth-page__orb--right" aria-hidden="true" />
+    <div className="site-shell">
+      <SiteHeader />
+      <main className="site-main site-main--auth">
+        <div className="auth-page auth-page--in-shell">
+          <div className="auth-page__orb auth-page__orb--left" aria-hidden="true" />
+          <div className="auth-page__orb auth-page__orb--right" aria-hidden="true" />
 
-      <section className="auth-page__shell">
-        <aside className="auth-page__panel auth-page__panel--brand">
-          <p className="auth-page__badge">{badge}</p>
-          <h1 className="auth-page__title">{title}</h1>
-          <p className="auth-page__description">{description}</p>
+          <section className="auth-page__shell">
+            <aside className="auth-page__panel auth-page__panel--brand">
+              <p className="auth-page__badge">{badge}</p>
+              <h1 className="auth-page__title">{title}</h1>
+              <p className="auth-page__description">{description}</p>
 
-          <ul className="auth-page__points">
-            {points.map((point) => (
-              <li key={point}>{point}</li>
-            ))}
-          </ul>
-        </aside>
+              <ul className="auth-page__points">
+                {points.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+            </aside>
 
-        <div className="auth-page__panel auth-page__panel--form">
-          {children}
+            <div className="auth-page__panel auth-page__panel--form">
+              {children}
 
-          <p className="auth-page__footer">
-            {footerPrompt}{" "}
-            <Link href={footerLinkHref}>{footerLinkLabel}</Link>
-          </p>
+              <p className="auth-page__footer">
+                {footerPrompt}{" "}
+                <Link href={footerLinkHref}>{footerLinkLabel}</Link>
+              </p>
+            </div>
+          </section>
         </div>
-      </section>
-    </main>
+      </main>
+      <SiteFooter />
+    </div>
   );
 }

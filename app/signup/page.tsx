@@ -1,20 +1,29 @@
 import type { Metadata } from "next";
-import { ScrapedHtml } from "@/components/ScrapedHtml";
-import { loadScrapedBody } from "@/lib/loadScrapedBody";
+
+import { AuthShell } from "@/components/auth/AuthShell";
+import { SignupForm } from "@/components/auth/SignupForm";
 
 export const metadata: Metadata = {
-  title: "Sign Up | BobbieD's Sweet Treats",
+  title: "Create account | BobbieD's Sweet Treats",
   description: "Create a BobbieD's Sweet Treats account.",
 };
 
-/** Alias for scraped `/m/create-account` markup. */
 export default function SignupPage() {
-  const html = loadScrapedBody("m-create-account-body-inner.html");
   return (
-    <ScrapedHtml
-      html={html}
-      className="scraped-membership-page scraped-membership-signup"
-      membershipForms="signup"
-    />
+    <AuthShell
+      badge="Get started"
+      title="Create your account"
+      description="Join BobbieD's Sweet Treats to track orders, save favorites, and speed through checkout."
+      points={[
+        "Track orders and view your purchase history",
+        "Save favorites to find them again later",
+        "Speed through checkout with saved details",
+      ]}
+      footerPrompt="Already have an account?"
+      footerLinkHref="/login"
+      footerLinkLabel="Sign in"
+    >
+      <SignupForm />
+    </AuthShell>
   );
 }

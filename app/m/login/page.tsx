@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { ScrapedHtml } from "@/components/ScrapedHtml";
-import { loadScrapedBody } from "@/lib/loadScrapedBody";
+import Link from "next/link";
+
+import { LoginForm } from "@/components/auth/LoginForm";
+import { MembershipShell } from "@/components/auth/MembershipShell";
 
 export const metadata: Metadata = {
   title: "Login | BobbieD's Sweet Treats",
@@ -8,14 +10,19 @@ export const metadata: Metadata = {
     "Sign in to your account to access your profile, history, and any private pages.",
 };
 
-/** Same markup as live `/m/login` (mirrors legacy storefront route). */
-export default function MembershipLoginAliasPage() {
-  const html = loadScrapedBody("m-login-body-inner.html");
+export default function MembershipLoginPage() {
   return (
-    <ScrapedHtml
-      html={html}
-      className="scraped-membership-page scraped-membership-login"
-      membershipForms="login"
-    />
+    <MembershipShell
+      eyebrow="ACCOUNT"
+      title="SIGN IN"
+      description="Sign in to your account to access your profile, history, and any private pages."
+      footer={
+        <p className="membership-page__meta">
+          <Link href="/m/reset-password">Forgot password?</Link>
+        </p>
+      }
+    >
+      <LoginForm variant="membership" />
+    </MembershipShell>
   );
 }

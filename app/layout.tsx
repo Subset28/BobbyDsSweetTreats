@@ -1,9 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { MirrorLinkInterceptor } from "@/components/MirrorLinkInterceptor";
+import { Inter, Playfair_Display } from "next/font/google";
+
 import { BRAND_LOGO_PATH } from "@/lib/siteBranding";
-/* Order matters: site overrides in globals must win over the storefront baseline. */
-import "./storefront.css";
 import "./globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL != null && process.env.NEXT_PUBLIC_SITE_URL !== ""
@@ -57,7 +68,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FF9A6D",
+  themeColor: "#c96b3c",
 };
 
 export default function RootLayout({
@@ -68,10 +79,9 @@ export default function RootLayout({
   return (
     <html lang="en-US" suppressHydrationWarning>
       <body
-        className="x x-fonts-cantarell x-fonts-poppins"
+        className={`${playfair.variable} ${inter.variable}`}
         suppressHydrationWarning
       >
-        <MirrorLinkInterceptor />
         {children}
       </body>
     </html>

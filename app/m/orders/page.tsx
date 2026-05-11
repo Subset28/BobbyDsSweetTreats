@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
-import { ScrapedHtml } from "@/components/ScrapedHtml";
+
+import { MembershipShell } from "@/components/auth/MembershipShell";
+import { OrdersList } from "@/components/orders/OrdersList";
 import { RequireAuth } from "@/components/RequireAuth";
-import { loadScrapedBody } from "@/lib/loadScrapedBody";
 
 export const metadata: Metadata = {
-  title: "Orders | BobbieD's Sweet Treats",
+  title: "My orders | BobbieD's Sweet Treats",
   description: "View your BobbieD's Sweet Treats order history.",
 };
 
 export default function MembershipOrdersPage() {
-  const html = loadScrapedBody("m-orders-body-inner.html");
   return (
     <>
       <RequireAuth />
-      <ScrapedHtml
-        html={html}
-        className="scraped-membership-page scraped-membership-orders"
-      />
+      <MembershipShell
+        eyebrow="ACCOUNT"
+        title="MY ORDERS"
+        description="Your recent orders are listed below."
+      >
+        <OrdersList />
+      </MembershipShell>
     </>
   );
 }
